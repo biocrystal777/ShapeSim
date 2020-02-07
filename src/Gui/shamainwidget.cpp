@@ -85,8 +85,6 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    //strideBox->addItem("0.005");
    thisLay->addWidget(strideBox, 12, 11, 1, 2);
 
-
-
    startButton = new QPushButton(tr("Calculate"), this);
    QObject::connect(startButton, SIGNAL(clicked()), this, SLOT(startCalculation()));
    thisLay->addWidget(startButton, 12, 3, 1, 6);

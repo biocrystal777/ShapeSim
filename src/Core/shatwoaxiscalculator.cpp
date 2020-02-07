@@ -228,7 +228,7 @@ void ShaTwoAxisCalculator::calcChiSqS(const QVector<ldouble> &axAlpha,
       for(int j = 0; j < bGridLength; ++j){
          ldouble SCalc = calcS(axAlpha[i], axBeta[j], dShell, visc, densCore, densSurf, densSolv);
          chiSq[i][j] = calcChiSq(SCalc, SMeas, SMeas);
-         qDebug() << (double) axAlpha[i] << (double) axBeta[j] << (double) chiSq[i][j] << (double) SCalc << (double) SMeas << (double) dShell << (double) visc;
+        // qDebug() << (double) axAlpha[i] << (double) axBeta[j] << (double) chiSq[i][j] << (double) SCalc << (double) SMeas << (double) dShell << (double) visc;
          if(calcDevs){
             chiSqUp[i][j] = calcChiSq(SCalc, SDevU, SMeas);
             chiSqL[i][j] = calcChiSq(SCalc, SDevL, SMeas);

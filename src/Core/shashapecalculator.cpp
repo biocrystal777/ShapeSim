@@ -145,22 +145,23 @@ void ShaShapeCalculator::writeGnuPlotChiSqData(const QString &fileName,
         script.open(scriptFileName.toStdString());
         script << "\
           # Auto generated gnuplot script ### \n\
-              set terminal pngcairo  transparent enhanced font \"tex-gyre-schola, 48\" fontscale 1.1 size 1800, 1300 \n\
+              set terminal pngcairo  transparent enhanced font \"tex-gyre-schola, 48\" fontscale 1.0 size 1800, 1300 background rgb 'white'\n\
                   set termoption enhanced \n\
                   set output '" << imgFileName.toStdString() << "'\n\
                   unset key \n\
                   set view map \n\
-                  set xtics border  0,10 mirror norotate  offset character 0, 0.9, 0 autojustify \n\
-                set ytics border 0,5 mirror norotate  offset character 0, 0, 0 autojustify \n\
+                  set xtics border  0,10 mirror norotate  offset character 0, 0.9, 0 font \"tex-gyre-schola, 40\" autojustify \n\
+                set ytics border 0,5 mirror norotate  offset character 0, 0.1, 0 font \"tex-gyre-schola, 40\" autojustify \n\
                 set ztics border in scale 0,0 nomirror norotate  offset character 0, 0, 0 autojustify \n\
                 set nocbtics \n\
                 set rtics axis in scale 0,0 nomirror norotate  offset character 0, 0, 0 autojustify \n\
               set xrange [ " << axAlpha.first() << " : " << axAlpha.last() << " ] noreverse nowriteback \n\
                                                                                   set yrange [ " << axBeta.first() << " : " << axBeta.last() << " ] noreverse nowriteback\n\
-                                                                                  #set pm3d map \n\
+                                                                                  set xlabel \'{/Symbol a} / nm\' enhanced offset character 0, 1.6, 0 font \"tex-gyre-schola, 48\" \n\
+                                                                                  set ylabel \'{/Symbol b} / nm\' enhanced offset character 0, 0.2, 0 font \"tex-gyre-schola, 48\"\n\
                                                                                   set logscale cb\n\
-                                                                                  set cblabel \'{/Symbol D}^2\' enhanced \n\
-                                                                                  set palette defined ( 20 \"#101010\", 30 \"#ff0000\", 40 \"#00ff00\", 50 \"#e0e0e0\" ) \n\
+                                                                                  set cblabel \'log_{10}({/Symbol D}^2\)' enhanced  font \"tex-gyre-schola, 42\"\n\
+                                                                                  set palette defined (00 \"#FFFFFF\", 20 \"#FFFF33\", 30 \"#CC0000\", 40 \"#0000CC\", 50 \"#000000\" ) \n\
                                                                                     set datafile missing \"?\"\n\
                                                                                     splot '"<< dataFileName.toStdString() << "' with image\n\
                                                                                     ";

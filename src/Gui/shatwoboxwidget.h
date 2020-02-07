@@ -152,8 +152,6 @@ protected:
    ldouble maximumSign;
    int maximumExp;
 
-
-
 protected slots:
 
    /*!

@@ -167,7 +167,6 @@ ldouble FFFTwoBoxWidget::calcSignificand(ldouble number, int *exponent)
    }
 }
 
-
 void FFFTwoBoxWidget::setSignifandStep(ldouble stepSize)
 {
    significand->setSingleStep(stepSize);
