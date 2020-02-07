@@ -1,0 +1,267 @@
+#include "shashapecalculator.h"
+
+int ShaShapeCalculator::minAt(const QVector<ldouble> &v, ldouble *val) const
+{
+    if(v.size() == 0) return -1;
+    int minPos = 0;
+    ldouble min = v[0];
+    for (int i = 0; i < v.size(); ++i){
+        if(v[i] < min){
+            minPos = i;
+            min = v[i];
+        }
+    }
+    if(val) *val = min;
+    return minPos;
+}
+
+ldouble ShaShapeCalculator::minOf(const QVector<QVector<ldouble> > &v, int *iPos, int *jPos) const
+{
+    if(v.size() == 0) return -1;
+    int minPosI = 0;
+    int minPosJ = 0;
+    ldouble min = std::numeric_limits<ldouble>::max();
+    for (int i = 0; i < v.size(); ++i){
+        for (int j = 0; j < v[i].size(); ++j){
+            ldouble vTest = v[i][j];
+            if(std::isnormal(vTest) && vTest < min){
+                minPosI = i;
+                minPosJ = j;
+                min = vTest;
+            }
+        }
+    }
+    if(iPos) *iPos = minPosI;
+    if(jPos) *jPos = minPosJ;
+    return min;
+}
+
+ldouble ShaShapeCalculator::maxOf(const QVector<QVector<ldouble> > &v, int *iPos, int *jPos) const
+{
+    if(v.size() == 0) return -1.0;
+    int maxPosI = 0;
+    int maxPosJ = 0;
+    ldouble max = std::numeric_limits<ldouble>::min();
+    for (int i = 0; i < v.size(); ++i){
+        for (int j = 0; j < v[i].size(); ++j){
+            ldouble vTest = v[i][j];
+            if(std::isnormal(vTest) && vTest > max){
+                maxPosI = i;
+                maxPosJ = j;
+                max = vTest;
+            }
+        }
+    }
+    if(iPos) *iPos = maxPosI;
+    if(jPos) *jPos = maxPosJ;
+    return max;
+}
+
+ldouble ShaShapeCalculator::meanOf(QVector<QVector<ldouble> > &v)
+{
+    ldouble sum(0);
+    //QVector<int> sizes;
+    long int totalSize = 0;
+    for(int i = 0; i < v.size(); ++i){
+        for(int j = 0; j < v[i].size(); ++j){
+            if(std::isnormal(v[i][j])){
+                sum += v[i][j];
+                ++totalSize;
+            }
+        }
+    }
+    return sum / totalSize;
+}
+
+void ShaShapeCalculator::extractMinLine(const QVector<ldouble> &axAlpha,
+                                        const QVector<ldouble> &axBeta,
+                                        const ldouble minDistAB,
+                                        const QVector<QVector<ldouble> > &chiSq,
+                                        QVector<ldouble> &minAlpha,
+                                        QVector<ldouble> &minBeta,
+                                        refGrid grid)
+{
+    if(grid == gridOnAlpha)
+    {
+        int gridLength = axAlpha.size();
+        minAlpha.reserve(gridLength);
+        minBeta.reserve(gridLength);
+        for(int i = 0; i < gridLength; ++i){
+            int pos = minAt(chiSq[i]);
+            if(axAlpha[i] > (axBeta[pos] + minDistAB)){
+                minAlpha << axAlpha[i];
+                minBeta << axBeta[pos];
+            }
+        }
+    }
+}
+
+pairLDouble ShaShapeCalculator::findIntersection(const QVector<ldouble> &alpha1, const QVector<ldouble> &beta1,
+                                                 const QVector<ldouble> &alpha2, const QVector<ldouble> &beta2,
+                                                 bool * foundIntersection, ldouble *rms){
+
+
+}
+
+void ShaShapeCalculator::writeGnuPlotChiSqData(const QString &fileName,
+                                               const QVector<ldouble> &axAlpha,
+                                               const QVector<ldouble> &axBeta,
+                                               const QVector<QVector<ldouble> > &chiSq)
+{
+    // Write data file and replace nan/inf by missing sign"?"
+    std::ofstream data;
+    data.open(std::string(fileName.toStdString()));
+    data << "# alpha" << " beta" << " chiSq" << "\n";
+    //ldouble upLimit = (maxOf(chiSqS) - minOf(chiSqS)) * 0.01 +  minOf(chiSqS); // show only the lowest 20 %
+    const ldouble lowLimit = minOf(chiSq);
+    const ldouble highLimit = maxOf(chiSq);
+    const ldouble deadValue = lowLimit - 1e-12 * (highLimit - lowLimit);
+    // const ldouble deadValue = -1.0;
+    for(int i = 0 ; i <  chiSq.size(); ++i){
+       for(int j = 0 ; j < chiSq[i].size(); ++j){
+          data << axAlpha[i] << " " << axBeta[j] << " ";
+          if(std::isnormal(chiSq[i][j]) && axAlpha[i] > axBeta[j]){
+             //if(std::isnormal(chiSq[i][j])){
+             ldouble plotValue = chiSq[i][j];
+             data << std::setprecision(15) << plotValue;
+             }
+          else data << std::setprecision(15) << deadValue;
+          data << "\n";
+       }
+       data << "\n";
+    }
+}
+
+    void ShaShapeCalculator::writeGnuPlotChiSqPlotScript(const QString &scriptFileName,
+                                                     const QString &dataFileName,
+                                                     const QString &imgFileName,
+                                                     const QVector<ldouble> &axAlpha,
+                                                     const QVector<ldouble> &axBeta
+                                                     )
+{
+    // write gnuplot script for chiSqS and insert axis sizes (later also file paths)
+    {
+        std::ofstream script;
+        script.open(scriptFileName.toStdString());
+        script << "\
+          # Auto generated gnuplot script ### \n\
+              set terminal pngcairo  transparent enhanced font \"tex-gyre-schola, 48\" fontscale 1.1 size 1800, 1300 \n\
+                  set termoption enhanced \n\
+                  set output '" << imgFileName.toStdString() << "'\n\
+                  unset key \n\
+                  set view map \n\
+                  set xtics border  0,10 mirror norotate  offset character 0, 0.9, 0 autojustify \n\
+                set ytics border 0,5 mirror norotate  offset character 0, 0, 0 autojustify \n\
+                set ztics border in scale 0,0 nomirror norotate  offset character 0, 0, 0 autojustify \n\
+                set nocbtics \n\
+                set rtics axis in scale 0,0 nomirror norotate  offset character 0, 0, 0 autojustify \n\
+              set xrange [ " << axAlpha.first() << " : " << axAlpha.last() << " ] noreverse nowriteback \n\
+                                                                                  set yrange [ " << axBeta.first() << " : " << axBeta.last() << " ] noreverse nowriteback\n\
+                                                                                  #set pm3d map \n\
+                                                                                  set logscale cb\n\
+                                                                                  set cblabel \'{/Symbol D}^2\' enhanced \n\
+                                                                                  set palette defined ( 20 \"#101010\", 30 \"#ff0000\", 40 \"#00ff00\", 50 \"#e0e0e0\" ) \n\
+                                                                                    set datafile missing \"?\"\n\
+                                                                                    splot '"<< dataFileName.toStdString() << "' with image\n\
+                                                                                    ";
+                                                                                    ;
+    }
+}
+
+void ShaShapeCalculator::callGnuPlot(const QString &gnuplotPath, const QString &scriptFileName)
+{
+    QStringList arguments;
+    arguments << scriptFileName;
+    int retErr = QProcess::execute(gnuplotPath, arguments);
+    if(retErr) ShaLog::logError(QObject::tr("gnuplot finished with error Code %1.").arg(retErr));
+    else { ShaLog::logText(QObject::tr("gnuplot finished without errors.")); }
+}
+
+int ShaShapeCalculator::plotCSV(const QString &fileName,
+                                const QStringList &headLine,
+                                const QVector<QVector<ldouble> > &plotValues) const
+{
+    if(headLine.size() != plotValues.size()) return 1;
+
+    int noOfCols = plotValues.size();
+    int last = noOfCols-1;
+    QVector<bool> stopFlags;
+    for(int i = 0; i < noOfCols; ++i) stopFlags << false;
+    std::ofstream data;
+    data.open(fileName.toStdString());
+    //  for(const QString & s : headLine) data << s.toStdString();
+    for(int i =0; i < noOfCols-1; ++i) data << headLine[i].toStdString() << ",";
+    data << headLine[last].toStdString() << "\n";
+    bool stopPlotting = false;
+    int i = 0;
+    while(!stopPlotting){
+        for(int j = 0; j < noOfCols - 1; ++j){
+            if(plotValues[j].size() - 1 > i)
+                data << plotValues[j][i] << ",";
+            else {
+                data << "nan" << ","; stopFlags[j] = true;
+            }
+        }
+        if(plotValues[last].size()-1 > i)
+            data << plotValues[last][i] << "\n";
+        else {
+            data << "nan" << "\n"; stopFlags[last] = true;
+        }
+        stopPlotting = true;
+        for(bool &b : stopFlags) stopPlotting &= b;
+        ++i;
+    }
+    return 0;
+}
+
+void ShaShapeCalculator::createVectorFromTo(QVector<ldouble> &v, ldouble min, ldouble max, ldouble stride)
+{
+    int gridLength = int((max-min) / stride);
+    v = QVector<ldouble>(gridLength);
+    for(int i = 0; i < gridLength; ++i) v [ i ] = min + stride * static_cast<ldouble>(i);
+    ++gridLength;
+    v.append(max);
+}
+
+void ShaShapeCalculator::plotAlphaBetaOptima(const QString& outPutDirPath,
+                                             const bool plotD, const QVector<ldouble> &minDAlpha, const QVector<ldouble> &minDBeta,
+                                             const bool plotS, const QVector<ldouble> &minSAlpha, const QVector<ldouble> &minSBeta,
+                                             const bool plotLam, const QVector<ldouble> &minLamAlpha, const QVector<ldouble> &minLamBeta,
+                                             const bool plotDDev, const QVector<ldouble> &minDAlphaDevU, const QVector<ldouble> &minDBetaDevU,
+                                             const QVector<ldouble> &minDAlphaDevL, const QVector<ldouble> &minDBetaDevL,
+                                             const bool plotSDev, const QVector<ldouble> &minSAlphaDevU, const QVector<ldouble> &minSBetaDevU,
+                                             const QVector<ldouble> &minSAlphaDevL, const QVector<ldouble> &minSBetaDevL,
+                                             const bool plotLamDev, const QVector<ldouble> &minLamAlphaDevU, const QVector<ldouble> &minLamBetaDevU,
+                                             const QVector<ldouble> &minLamAlphaDevL, const QVector<ldouble> &minLamBetaDevL) const
+{
+    // Write data file and replace nan/inf by missing sign"?"
+    QStringList headLine;
+    QVector<QVector<ldouble> > plotValues;
+    if(plotD){
+        headLine << "alpha D" << "beta D";
+        plotValues << minDAlpha << minDBeta;
+    }
+    if(plotS){
+        headLine << "alpha S" << "beta S";
+        plotValues << minSAlpha << minSBeta;
+    }
+    if(plotLam){
+        headLine << "alpha lambda" << "beta lambda";
+        plotValues << minLamAlpha << minLamBeta;
+    }
+    if(plotDDev){
+        headLine << "alpha D UpLim" << "beta D UpLim" << "alpha D LowLim" << "beta D LowLim";
+        plotValues << minDAlphaDevU << minDBetaDevU << minDAlphaDevL << minDBetaDevL;
+    }
+    if(plotSDev){
+        headLine << "alpha S UpLim" << "beta S UpLim" << "alpha S LowLim" << "beta S LowLim";
+        plotValues << minSAlphaDevU << minSBetaDevU << minSAlphaDevL << minSBetaDevL;
+    }
+    if(plotLamDev){
+        headLine << "alpha Lam UpLim" << "beta Lam UpLim" << "alpha Lam LowLim" << "beta Lam LowLim";
+        plotValues << minLamAlphaDevU << minLamBetaDevU << minLamAlphaDevL << minLamBetaDevL;
+    }
+    int err = plotCSV(tr("%1/optLines.csv").arg(outPutDirPath), headLine, plotValues);
+    if(err == 1) ShaLog::logError(tr("Plotting alpha/beta failed; HeadLine incompatible with data set."));
+}
+
