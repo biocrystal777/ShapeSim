@@ -2,7 +2,13 @@
 #define SHATWOAXISCALCULATOR_H
 
 #include "./shashapecalculator.h"
-
+/*!
+ * \brief The ShaTwoAxisCalculator class
+ * \todo : Documentation
+ *         Extract prolate specific formula into seperate class
+ *         create parameter objects and reduce header overhead
+ *         reduce "local global" member variables
+ */
 class ShaTwoAxisCalculator : public ShaShapeCalculator
 {
 public:

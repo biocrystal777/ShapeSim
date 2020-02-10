@@ -1,5 +1,7 @@
 #include "shatwoaxiscalculator.h"
 
+
+
 ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
                                            const ldouble stride,
                                            const ldouble axAlphaMin,
