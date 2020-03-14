@@ -29,13 +29,14 @@ public:
    inline ldouble getLSPRLambda()    const { return static_cast<ldouble>(waveLengthBox->value());    }
    inline bool    useDiffCoeff()     const { return useDBox->isChecked();                            }
    inline bool    useSedCoeff()      const { return useSBox->isChecked();                            }
-   inline bool    useLSPRLambda()    const { return useLamBox->isChecked();                          }
+   inline bool    useLSPRLambda()    const { return useLamBox->isChecked();                          }   
    inline ldouble getDiffCoeffDev()  const { return static_cast<ldouble>(diffCoeffDevBox->value());  }
    inline ldouble getSedCoeffDev()   const { return static_cast<ldouble>(sedCoeffDevBox->value());   }
    inline ldouble getLSPRLambdaDev() const { return static_cast<ldouble>(waveLengthDevBox->value()); }
    inline bool    useDiffCoeffDev()  const { return useDBox->isChecked();                            }
    inline bool    useSedCoeffDev()   const { return useSBox->isChecked();                            }
    inline bool    useLSPRLambaDev()  const { return useLamBox->isChecked();                          }
+
 
    void loadParameters();
 private:
@@ -53,6 +54,7 @@ private:
    QCheckBox *useDDevBox            = nullptr;
    QCheckBox *useSDevBox            = nullptr;
    QCheckBox *useLamDevBox          = nullptr;
+   QCheckBox *trackDensityBox       = nullptr;
 
 
 public slots:

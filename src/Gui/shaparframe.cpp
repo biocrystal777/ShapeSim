@@ -152,8 +152,6 @@ ShaSingleSDPairWidget::ShaSingleSDPairWidget(QWidget *parent, Qt::WindowFlags f)
    diffCoeffBox = new FFFTwoBoxWidget(this);
    lay->addWidget(diffCoeffBox, 0, 3, 1, 4);
 
-
-
    label = new QLabel(this);
    label->setText(tr("+-"));
    lay->addWidget(label, 0, 7, 1, 1);
@@ -189,32 +187,43 @@ ShaSingleSDPairWidget::ShaSingleSDPairWidget(QWidget *parent, Qt::WindowFlags f)
    QObject::connect(useSDevBox, SIGNAL(toggled(bool)), this, SLOT(toggleDevS(bool)));
    lay->addWidget(useSDevBox, 1, 12, 1, 4);
 
+   useSDevBox = new QCheckBox(this);
+   useSDevBox->setChecked(true);
+   QObject::connect(useSDevBox, SIGNAL(toggled(bool)), this, SLOT(toggleDevS(bool)));
+   lay->addWidget(useSDevBox, 1, 12, 1, 4);
+
+   trackDensityBox = new QCheckBox(this);
+   trackDensityBox->setChecked(true);
+   lay->addWidget(trackDensityBox, 2, 0, 1, 1);
+   label = new QLabel(this);
+   label->setText(tr("track density"));
+   lay->addWidget(label, 2, 1, 1, 4, Qt::AlignLeft);
 
 
 
    useLamBox = new QCheckBox(this);
    useLamBox->setChecked(true);
    QObject::connect(useLamBox, SIGNAL(toggled(bool)), this, SLOT(toggleLam(bool)));
-   lay->addWidget(useLamBox, 2, 0, 1, 1);
+   lay->addWidget(useLamBox, 3, 0, 1, 1);
 
    label = new QLabel(this);
    label->setText(tr("λ<sub>meas</sub> [nm]:"));
-   lay->addWidget(label, 2, 1, 1, 3, Qt::AlignLeft);
+   lay->addWidget(label, 3, 1, 1, 3, Qt::AlignLeft);
    waveLengthBox = new QDoubleSpinBox(this);
    waveLengthBox->setMinimum(100);
    waveLengthBox->setMaximum(1000);
-   lay->addWidget(waveLengthBox, 2, 4, 1, 3);
+   lay->addWidget(waveLengthBox, 3, 4, 1, 3);
 
    label = new QLabel(this);
    label->setText(tr("+-"));
-   lay->addWidget(label, 2, 7, 1, 1, Qt::AlignLeft);
+   lay->addWidget(label, 3, 7, 1, 1, Qt::AlignLeft);
    waveLengthDevBox = new QDoubleSpinBox(this);
-   lay->addWidget(waveLengthDevBox, 2, 8, 1, 3);
+   lay->addWidget(waveLengthDevBox, 3, 8, 1, 3);
 
    useLamDevBox = new QCheckBox(this);
    useLamDevBox->setChecked(true);
    QObject::connect(useLamDevBox, SIGNAL(toggled(bool)), this, SLOT(toggleDevLam(bool)));
-   lay->addWidget(useLamDevBox, 2, 11, 1, 3);
+   lay->addWidget(useLamDevBox, 3, 11, 1, 3);
 
    loadParameters();
 }
@@ -283,10 +292,12 @@ void ShaSingleSDPairWidget::toggleD(bool on)
 void ShaSingleSDPairWidget::toggleS(bool on)
 {
    if(sedCoeffBox) sedCoeffBox->setEnabled(on);
+   if(trackDensityBox) trackDensityBox->setEnabled(on);
    if(useSDevBox){
       if(on){
          toggleDevS(useSDevBox->isChecked());
          useSDevBox->setEnabled(true);
+
       }
       else {
          toggleDevS(false);
