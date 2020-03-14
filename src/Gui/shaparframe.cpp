@@ -422,49 +422,18 @@ QString ShaDistrSDPairWidget::getDistrFilePath(bool quoted) const {
 
 QString ShaDistrSDPairWidget::chopStringsQuotMarksToOne(QString & string) const
 {
-#if QT_VERSION >= 0x05000
    chopStringsQuotMarksEntirely(string);
    string.prepend('\"');
    string.append('\"');
-#else
-   const QChar compChar('\"');
-   uint stringLength = string.length();
-   if(stringLength < 5)
-      return QString("");
-   while(string.at(1) == compChar){
-      string.remove(0, 1);
-   }
-   stringLength = string.length();
-
-   while(string.at(stringLength - 2).toAscii() == compChar.toAscii()){
-      string.remove(stringLength - 1, 1);
-      stringLength = string.length();
-   }
-   stringLength = string.length();
-   if(string.at(0).toAscii() != compChar.toAscii()) string.prepend(compChar);
-   if(string.at(stringLength - 1).toAscii() != compChar.toAscii()) string.append((compChar));
-#endif
    return string;
 }
 
 QString ShaDistrSDPairWidget::chopStringsQuotMarksEntirely(QString & string) const
 {
-#if QT_VERSION >= 0x05000
    const QChar quotMark('\"');
    while(!string.isEmpty() && string.at(0) == quotMark)
       string.remove(0, 1);
    while(!string.isEmpty() && string.at(string.length()-1) == quotMark)
       string.remove(string.length()-1, 1);
-
-#else
-   const QChar compChar('\"');
-   uint stringLength = string.length();
-   int removed=0;
-   for(int i = 0; i < stringLength; ++i)
-      if(string.at(i-removed).toAscii() == compChar.toAscii()){
-         string.remove(i-removed, 1);
-         ++removed;
-      }
-#endif
    return string;
 }
