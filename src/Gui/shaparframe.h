@@ -36,6 +36,8 @@ public:
    inline bool    useDiffCoeffDev()  const { return useDBox->isChecked();                            }
    inline bool    useSedCoeffDev()   const { return useSBox->isChecked();                            }
    inline bool    useLSPRLambaDev()  const { return useLamBox->isChecked();                          }
+   inline bool    useTrackDensity()  const { return trackDensityBox->isChecked();                    }
+
 
 
    void loadParameters();
@@ -142,8 +144,9 @@ public:
    inline ldouble getSedCoeffDev()   const { return this->singleSDPairWidget->getSedCoeffDev();      }
    inline ldouble getLSPRLambdaDev() const { return this->singleSDPairWidget->getSedCoeffDev();      }
    inline bool    useDiffCoeffDev()  const { return this->singleSDPairWidget->useDiffCoeffDev();     }
-   inline bool    useSedCoeffDev()   const { return this->singleSDPairWidget-> useSedCoeffDev();     }
+   inline bool    useSedCoeffDev()   const { return this->singleSDPairWidget->useSedCoeffDev();      }
    inline bool    useLSPRLambaDev()  const { return this->singleSDPairWidget->useLSPRLambaDev();     }
+   inline bool    useTrackDensity()  const { return this->singleSDPairWidget->useTrackDensity();     }
 
    inline QString getDistrFile()     const { return this->distSDPairWidget->getDistrFilePath();      }
 
