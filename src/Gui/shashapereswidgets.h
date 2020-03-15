@@ -3,19 +3,11 @@
 #include "./shadefinitions.h"
 
 #include <QtGlobal>
-#if QT_VERSION< 0x050000
-#include <QWidget>
-#include <QGridLayout>
-#include <QDoubleSpinBox>
-#include <QLabel>
-#include <QLineEdit>
-#else
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#endif
 
 class ShaShapeResWidget : public QWidget {
    Q_OBJECT
