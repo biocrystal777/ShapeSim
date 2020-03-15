@@ -13,14 +13,9 @@ public:
                         const ldouble axBetaMin,
                         const ldouble axBetaMax,
                         const PhysicalParameters physPars,
+                        //
+                        const MeasurementParamaters measPars,
                         /*
-                        const ldouble dShell,
-                        const ldouble visc,
-                        const ldouble T,
-                        const ldouble densCore,
-                        const ldouble densSurf,
-                        const ldouble densSolv,
-                        */
                         const ldouble DMeas,
                         const ldouble SMeas,
                         const ldouble lamMeas,
@@ -34,6 +29,7 @@ public:
                         const bool plotSDev,
                         const bool plotLamDev,
                         const bool useTrackDensity,
+                        */
                         const bool useGnuplot,
                         const QString &gnuplotPath);
    ~ShaProlateCalculator(){}

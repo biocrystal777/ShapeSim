@@ -285,17 +285,18 @@ void ShaMainWidget::sphereCalculation(QVector<ldouble> &rad, QVector<ldouble> &c
    constexpr ldouble PI   = 3.141;
    constexpr ldouble tsPI = 3.141 * 3.0 / 4.0;
    constexpr ldouble kB   = 1.3806488e-23;
-   //const double dShell = parFrame->
-   auto physPars = parFrame->getPhysicalParameters();
 
+   auto physPars = parFrame->getPhysicalParameters();
    const ldouble dShell   = physPars.layerSurf;
    const ldouble visc     = physPars.viscSolv; // from P to cP = m*Pa
    const ldouble T        = physPars.temperature;
    const ldouble densCor  = physPars.densCore;
    const ldouble densSurf = physPars.densSurf;
    const ldouble densSolv = physPars.densSolv;
-   const ldouble DMeas    = parFrame->getDiffCoeff();
-   const ldouble SMeas    = parFrame->getSedCoeff();
+
+   auto measPars = parFrame->getMeasurementParameters();
+   const ldouble DMeas    = measPars.DMeas;
+   const ldouble SMeas    = measPars.sMeas;
 
    QVector<ldouble> densParticle(gridLength);
    for(int i = 0; i < gridLength; ++i){
@@ -517,7 +518,8 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxBetaMin(),
                prolateWidgetPtr->getAxBetaMax(),
                parFrame->getPhysicalParameters(),
-               parFrame->getDiffCoeff(),
+               parFrame->getMeasurementParameters(),
+               /*parFrame->getDiffCoeff(),
                parFrame->getSedCoeff(),
                parFrame->getLSPRLambda(),
                parFrame->getDiffCoeffDev(),
@@ -530,6 +532,7 @@ void ShaMainWidget::singleCalculation()
                parFrame->useSedCoeffDev(),
                parFrame->useLSPRLambaDev(),
                parFrame->useTrackDensity(),
+                        */
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
@@ -561,7 +564,8 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxBetaMin(),
                prolateWidgetPtr->getAxBetaMax(),               
                parFrame->getPhysicalParameters(),
-               parFrame->getDiffCoeff(),
+               parFrame->getMeasurementParameters(),
+               /*parFrame->getDiffCoeff(),
                parFrame->getSedCoeff(),
                parFrame->getLSPRLambda(),
                parFrame->getDiffCoeffDev(),
@@ -574,6 +578,7 @@ void ShaMainWidget::singleCalculation()
                parFrame->useSedCoeffDev(),
                parFrame->useLSPRLambaDev(),
                parFrame->useTrackDensity(),
+                        */
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
@@ -631,6 +636,23 @@ void ShaMainWidget::distrCalculation()
          //thread_id = 0;
 #pragma omp for
          for(uint i = 0; i < distSize; ++i){
+
+            MeasurementParamaters measPars {
+               true, //parFrame->useDiffCoeff(),
+               true,// parFrame->useSedCoeff(),
+               false, //parFrame->useLSPRLambda(),
+               false, //parFrame->useDiffCoeffDev(),
+               false, //parFrame->useSedCoeffDev(),
+               false, //parFrame->useLSPRLambaDev()
+               false, //parFrame->useTrackDensity(),
+               distD[i],  //parFrame->getDiffCoeff(),
+               distS[i],  //parFrame->getSedCoeff(),
+               0.0,// parFrame->getLSPRLambda(),
+               0.0,//parFrame->getDiffCoeffDev(),
+               0.0,//parFrame->getSedCoeffDev(),
+               0.0,//parFrame->getLSPRLambdaDev(),
+            };
+
             ShaProlateCalculator prolateCalculator(
                      outPutDir->text()
                      .append(tr("D_%1").arg(QString::number(static_cast<double>(distD[i]), 'e', 5)))
@@ -642,20 +664,7 @@ void ShaMainWidget::distrCalculation()
                      prolateWidgetPtr->getAxBetaMax(),
                      //surfLayerThicknessBox->value(),
                      parFrame->getPhysicalParameters(),
-                     //
-                     distD[i],  //parFrame->getDiffCoeff(),
-                     distS[i],  //parFrame->getSedCoeff(),
-                     0.0,// parFrame->getLSPRLambda(),
-                     0.0,//parFrame->getDiffCoeffDev(),
-                     0.0,//parFrame->getSedCoeffDev(),
-                     0.0,//parFrame->getLSPRLambdaDev(),
-                     true, //parFrame->useDiffCoeff(),
-                     true,// parFrame->useSedCoeff(),
-                     false, //parFrame->useLSPRLambda(),
-                     false, //parFrame->useDiffCoeffDev(),
-                     false, //parFrame->useSedCoeffDev(),
-                     false, //parFrame->useLSPRLambaDev()
-                     parFrame->useTrackDensity(),
+                     measPars,
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );
@@ -671,6 +680,22 @@ void ShaMainWidget::distrCalculation()
 #pragma omp for
          for(uint i = 0; i < distSize; ++i){
 
+            MeasurementParamaters measPars {
+               true, //parFrame->useDiffCoeff(),
+               true,// parFrame->useSedCoeff(),
+               false, //parFrame->useLSPRLambda(),
+               false, //parFrame->useDiffCoeffDev(),
+               false, //parFrame->useSedCoeffDev(),
+               false, //parFrame->useLSPRLambaDev()
+               false, //parFrame->useTrackDensity(),
+               distD[i],  //parFrame->getDiffCoeff(),
+               distS[i],  //parFrame->getSedCoeff(),
+               0.0,// parFrame->getLSPRLambda(),
+               0.0,//parFrame->getDiffCoeffDev(),
+               0.0,//parFrame->getSedCoeffDev(),
+               0.0,//parFrame->getLSPRLambdaDev(),
+            };
+
             ShaLongRodCalculator longRodCalculator(
                      outPutDir->text()
                      .append(tr("D_%1").arg(QString::number(static_cast<double>(distD[i]), 'e', 5)))
@@ -681,19 +706,7 @@ void ShaMainWidget::distrCalculation()
                      longRodWidgetPtr->getAxBetaMin(),
                      longRodWidgetPtr->getAxBetaMax(),
                      parFrame->getPhysicalParameters(),
-                     distD[i],  //parFrame->getDiffCoeff(),
-                     distS[i],  //parFrame->getSedCoeff(),
-                     0.0,// parFrame->getLSPRLambda(),
-                     0.0,//parFrame->getDiffCoeffDev(),
-                     0.0,//parFrame->getSedCoeffDev(),
-                     0.0,//parFrame->getLSPRLambdaDev(),
-                     true, //parFrame->useDiffCoeff(),
-                     true,// parFrame->useSedCoeff(),
-                     false, //parFrame->useLSPRLambda(),
-                     false, //parFrame->useDiffCoeffDev(),
-                     false, //parFrame->useSedCoeffDev(),
-                     false, //parFrame->useLSPRLambaDev()
-                     parFrame->useTrackDensity(),
+                     measPars,
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );

@@ -25,7 +25,26 @@ public:
    ShaSingleSDPairWidget(ShaSingleSDPairWidget&& src) = delete;
    ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget&& src) = delete;   
 
-   inline ldouble getDiffCoeff()     const { return static_cast<ldouble>(diffCoeffBox->value());     }
+
+   MeasurementParamaters getMeasurementParameters() const {
+      return MeasurementParamaters {
+         useDBox->isChecked(),
+               useSBox->isChecked(),
+               useLamBox->isChecked(),
+               useDDevBox->isChecked(),
+               useSDevBox->isChecked(),
+               useLamDevBox->isChecked(),
+               trackDensityBox->isChecked(),
+               static_cast<ldouble>(diffCoeffBox->value()),
+               static_cast<ldouble>(sedCoeffBox->value()),
+               static_cast<ldouble>(waveLengthBox->value()),
+               static_cast<ldouble>(diffCoeffDevBox->value()),
+               static_cast<ldouble>(sedCoeffDevBox->value()),
+               static_cast<ldouble>(waveLengthDevBox->value())
+      };
+   }
+
+//   inline ldouble getDiffCoeff()     const { return static_cast<ldouble>(diffCoeffBox->value());     }
    inline ldouble getSedCoeff()      const { return static_cast<ldouble>(sedCoeffBox->value());      }
    inline ldouble getLSPRLambda()    const { return static_cast<ldouble>(waveLengthBox->value());    }
    inline bool    useDiffCoeff()     const { return useDBox->isChecked();                            }
@@ -38,8 +57,6 @@ public:
    inline bool    useSedCoeffDev()   const { return useSBox->isChecked();                            }
    inline bool    useLSPRLambaDev()  const { return useLamBox->isChecked();                          }
    inline bool    useTrackDensity()  const { return trackDensityBox->isChecked();                    }
-
-
 
    void loadParameters();
 private:
@@ -109,7 +126,6 @@ private:
     */
    QString chopStringsQuotMarksEntirely(QString &string) const;
 
-
 private slots:
    void saveParameters();
    void chooseFilePath();
@@ -142,7 +158,10 @@ public:
       };
    }
 
-   inline ldouble getDiffCoeff()     const { return this->singleSDPairWidget->getDiffCoeff();        }
+
+
+   inline MeasurementParamaters getMeasurementParameters() const { return singleSDPairWidget->getMeasurementParameters();}
+/*   inline ldouble getDiffCoeff()     const { return this->singleSDPairWidget->getDiffCoeff();        }
    inline ldouble getSedCoeff()      const { return this->singleSDPairWidget->getSedCoeff();         }
    inline ldouble getLSPRLambda()    const { return this->singleSDPairWidget->getLSPRLambda();       }
    inline bool    useDiffCoeff()     const { return this->singleSDPairWidget->useDiffCoeff();        }
@@ -155,6 +174,7 @@ public:
    inline bool    useSedCoeffDev()   const { return this->singleSDPairWidget->useSedCoeffDev();      }
    inline bool    useLSPRLambaDev()  const { return this->singleSDPairWidget->useLSPRLambaDev();     }
    inline bool    useTrackDensity()  const { return this->singleSDPairWidget->useTrackDensity();     }
+*/
 
    inline QString getDistrFile()     const { return this->distSDPairWidget->getDistrFilePath();      }
 
