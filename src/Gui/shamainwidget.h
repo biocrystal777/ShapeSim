@@ -116,15 +116,6 @@ private:
    // log Widget
    ShaLog *logWidget = nullptr;
 
-   /*
-  Uses Macros to load parameters:
-  Macros are defined.for different data types, targeting member widgets or setter functions
-  They generally are implemented using the following scheme:
-  1. Fetch value from settings object
-  2. Check if the conversion from QVariant (return value of settings object) worked fine
-  3. write value to member widget or call setter function
-*/
-
    void sphereCalculation(QVector<ldouble> &rad,
                           QVector<ldouble> &chiSq
                           //chiSqType minMode

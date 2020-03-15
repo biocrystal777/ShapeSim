@@ -352,14 +352,6 @@ void ShaMainWidget::switchToProlate(bool chosen)
       shapeWidget->hide();
       shapeWidget = prolateWidgetPtr;
       shapeWidget->show();
-      /*
-      #include "qwt_plot_spectrogram.h"
-      #include "qwt_plot.h"
-      #include "qwt_plot_grid.h"
-      #include "qwt_plot_curve.h"
-      #include "qwt_color_map.h"
-      #include "qwt_raster_data.h"
-      */
       shapeResWidget->hide();
       shapeResWidget = prolateResWidgetPtr;
       shapeResWidget->show();
@@ -519,20 +511,6 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxBetaMax(),
                parFrame->getPhysicalParameters(),
                parFrame->getMeasurementParameters(),
-               /*parFrame->getDiffCoeff(),
-               parFrame->getSedCoeff(),
-               parFrame->getLSPRLambda(),
-               parFrame->getDiffCoeffDev(),
-               parFrame->getSedCoeffDev(),
-               parFrame->getLSPRLambdaDev(),
-               parFrame->useDiffCoeff(),
-               parFrame->useSedCoeff(),
-               parFrame->useLSPRLambda(),
-               parFrame->useDiffCoeffDev(),
-               parFrame->useSedCoeffDev(),
-               parFrame->useLSPRLambaDev(),
-               parFrame->useTrackDensity(),
-                        */
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
@@ -565,20 +543,6 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxBetaMax(),               
                parFrame->getPhysicalParameters(),
                parFrame->getMeasurementParameters(),
-               /*parFrame->getDiffCoeff(),
-               parFrame->getSedCoeff(),
-               parFrame->getLSPRLambda(),
-               parFrame->getDiffCoeffDev(),
-               parFrame->getSedCoeffDev(),
-               parFrame->getLSPRLambdaDev(),
-               parFrame->useDiffCoeff(),
-               parFrame->useSedCoeff(),
-               parFrame->useLSPRLambda(),
-               parFrame->useDiffCoeffDev(),
-               parFrame->useSedCoeffDev(),
-               parFrame->useLSPRLambaDev(),
-               parFrame->useTrackDensity(),
-                        */
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );

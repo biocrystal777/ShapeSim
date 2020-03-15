@@ -13,9 +13,7 @@ public:
                         const ldouble axBetaMin,
                         const ldouble axBetaMax,
                         const PhysicalParameters physPars,
-
                         const MeasurementParamaters measPars,
-
                         const bool useGnuplot,
                         const QString &gnuplotPath);
    ~ShaLongRodCalculator(){}

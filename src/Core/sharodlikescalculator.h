@@ -1,6 +1,7 @@
 #ifndef SHARODLIKESCALCULATOR_H
 #define SHARODLIKESCALCULATOR_H
 #include "./shatwoaxiscalculator.h"
+#include "./shaparamstructs.h"
 
 class ShaRodLikesCalculator : public ShaTwoAxisCalculator
 {
@@ -11,25 +12,8 @@ public:
                          const ldouble axAlphaMax,
                          const ldouble axBetaMin,
                          const ldouble axBetaMax,
-                         const ldouble dShell,
-                         const ldouble visc,
-                         const ldouble T,
-                         const ldouble densCore,
-                         const ldouble densSurf,
-                         const ldouble densSolv,
-                         const ldouble DMeas,
-                         const ldouble SMeas,
-                         const ldouble lamMeas,
-                         const ldouble DDev,
-                         const ldouble SDev,
-                         const ldouble lamDev,
-                         const bool plotD,
-                         const bool plotS,
-                         const bool plotLam,
-                         const bool plotDDev,
-                         const bool plotSDev,
-                         const bool plotLamDev,
-                         const bool useTrackDensity,
+                         const PhysicalParameters physPars,
+                         const MeasurementParamaters measPars,
                          const bool useGnuplot,
                          const QString &gnuplotPath);
    ~ShaRodLikesCalculator(){}
