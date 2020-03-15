@@ -77,4 +77,5 @@ HEADERS += ./src/Core/shacsvparser.h \
            ./src/Gui/shashapereswidgets.h \           
            ./src/Gui/shaparframe.h \
            ./src/Gui/shalog_omp.h \           
-           ./src/Gui/shagnuplotframe.h
+           ./src/Gui/shagnuplotframe.h \
+    src/Core/shaparamstructs.h

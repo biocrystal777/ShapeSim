@@ -534,6 +534,7 @@ void ShaMainWidget::singleCalculation()
                parFrame->useDiffCoeffDev(),
                parFrame->useSedCoeffDev(),
                parFrame->useLSPRLambaDev(),
+               parFrame->useTrackDensity(),
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
@@ -582,6 +583,7 @@ void ShaMainWidget::singleCalculation()
                parFrame->useDiffCoeffDev(),
                parFrame->useSedCoeffDev(),
                parFrame->useLSPRLambaDev(),
+               parFrame->useTrackDensity(),
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
@@ -666,6 +668,7 @@ void ShaMainWidget::distrCalculation()
                      false, //parFrame->useDiffCoeffDev(),
                      false, //parFrame->useSedCoeffDev(),
                      false, //parFrame->useLSPRLambaDev()
+                     parFrame->useTrackDensity(),
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );
@@ -708,6 +711,7 @@ void ShaMainWidget::distrCalculation()
                      false, //parFrame->useDiffCoeffDev(),
                      false, //parFrame->useSedCoeffDev(),
                      false, //parFrame->useLSPRLambaDev()
+                     parFrame->useTrackDensity(),
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );

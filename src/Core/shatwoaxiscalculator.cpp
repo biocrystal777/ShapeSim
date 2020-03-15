@@ -1,7 +1,5 @@
 #include "shatwoaxiscalculator.h"
 
-
-
 ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
                                            const ldouble stride,
                                            const ldouble axAlphaMin,
@@ -26,6 +24,7 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
                                            const bool plotDDev,
                                            const bool plotSDev,
                                            const bool plotLamDev,
+                                           const bool trackDensity,
                                            const bool useGnuplot,
                                            const QString &gnuplotPath) :
    outPutDirPath(outPutDirPath),
@@ -52,6 +51,7 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
    plotDDev(plotDDev),
    plotSDev(plotSDev),
    plotLamDev(plotLamDev),
+   trackDensity(trackDensity),
    useGnuplot(useGnuplot),
    gnuplotPath(gnuplotPath)
 {

@@ -24,6 +24,7 @@ ShaProlateCalculator::ShaProlateCalculator(const QString &outPutDirPath,
                                            const bool plotDDev,
                                            const bool plotSDev,
                                            const bool plotLamDev,
+                                           const bool useTrackDenisity,
                                            const bool useGnuplot,
                                            const QString &gnuplotPath) :
    ShaRodLikesCalculator(outPutDirPath,
@@ -50,9 +51,9 @@ ShaProlateCalculator::ShaProlateCalculator(const QString &outPutDirPath,
                          plotDDev,
                          plotSDev,
                          plotLamDev,
+                         trackDensity,
                          useGnuplot,
                          gnuplotPath) {}
-
 
 ldouble ShaProlateCalculator::calcFF0(const ldouble P) const
 {

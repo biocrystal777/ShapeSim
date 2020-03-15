@@ -36,6 +36,7 @@ public:
                         const bool plotDDev,
                         const bool plotSDev,
                         const bool plotLamDev,
+                        const bool useTrackDensity,
                         const bool useGnuplot,
                         const QString &gnuplotPath);
    virtual ~ShaTwoAxisCalculator(){}
@@ -87,6 +88,7 @@ protected:
    const bool plotDDev;
    const bool plotSDev;
    const bool plotLamDev;
+   const bool trackDensity;
 
 const bool useGnuplot;
 const QString gnuplotPath;
