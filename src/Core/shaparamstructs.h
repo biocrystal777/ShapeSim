@@ -1,7 +1,9 @@
 #ifndef SHAPARAMSTRUCTS_H
 #define SHAPARAMSTRUCTS_H
 
-struct gridParameters {
+#include "./shadefinitions.h"
+
+struct GridParameters {
    double alphaMin;
    double alphaMax;
    double betaMin;
@@ -9,17 +11,17 @@ struct gridParameters {
    double stride;
 };
 
-struct fixedParameters {
-   double densCore;
-   double densSurf;
-   double densSolv;
-   double viscSolv;
-   double temperature;
-   double layerSurf;
-   double layerSolv;
+struct PhysicalParameters {
+   ldouble densCore;
+   ldouble densSurf;
+   ldouble densSolv;
+   ldouble viscSolv;
+   ldouble temperature;
+   ldouble layerSurf;
+   ldouble layerSolv;
 };
 
-struct evalParamaters {
+struct MeasurementParamaters {
    bool useD;
    bool useS;
    bool useLam;
@@ -28,12 +30,12 @@ struct evalParamaters {
    bool useLamDev;
    bool trackDensity;
 
-   double DMeas;
-   double sMeas;
-   double lamMeas;
-   double DDev;
-   double sDev;
-   double lamDev;
+   ldouble DMeas;
+   ldouble sMeas;
+   ldouble lamMeas;
+   ldouble DDev;
+   ldouble sDev;
+   ldouble lamDev;
 };
 
 #endif // SHAPARAMSTRUCTS_H

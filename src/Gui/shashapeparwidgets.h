@@ -4,18 +4,10 @@
 #include <QtGlobal>
 #include "./shadefinitions.h"
 
-#if QT_VERSION < 0x050000
-#include <QWidget>
-#include <QGridLayout>
-#include <QDoubleSpinBox>
-#include <QLabel>
-#else
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QLabel>
-#endif
-
 
 class ShaShapeParWidget : public QWidget {
    Q_OBJECT

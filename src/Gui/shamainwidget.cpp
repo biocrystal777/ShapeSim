@@ -29,16 +29,6 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    thisLay->addWidget(shapeFrame, 0, 5, 10, 10);
    shapeFrameLay = new QGridLayout(shapeFrame);
 
-   QLabel* label = new QLabel("layer<sub>surf</sub> [nm]:", shapeFrame);
-   shapeFrameLay->addWidget(label, 0, 0, 1, 3);
-   surfLayerThicknessBox = new QDoubleSpinBox(shapeFrame);
-   shapeFrameLay->addWidget(surfLayerThicknessBox, 0, 3, 1, 3);
-   label = new QLabel("layer<sub>solv</sub> [nm]:", shapeFrame);
-   shapeFrameLay->addWidget(label, 0, 6, 1, 3);
-   solvLayerThicknessBox = new QDoubleSpinBox(shapeFrame);
-   solvLayerThicknessBox->setEnabled(false);
-   shapeFrameLay->addWidget(solvLayerThicknessBox, 0, 9, 1, 3);
-
    shapeGroupBox = new QGroupBox(tr("Shape"),shapeFrame);
    shapeSwitchLay = new QGridLayout(shapeGroupBox);
    sphereSwitch = new QRadioButton(tr("Sphere"), shapeGroupBox);
@@ -72,7 +62,7 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    gnuPlotFrame = new ShaGnuplotFrame(this);
    thisLay->addWidget(gnuPlotFrame, 11, 0, 1, 10);
 
-   label = new QLabel("Stride [nm]:", this);
+   QLabel *label = new QLabel("Stride [nm]:", this);
    thisLay->addWidget(label, 12, 9, 1, 2);
    strideBox = new QComboBox(this);
    strideBox->addItem("1.0");
@@ -162,8 +152,8 @@ void ShaMainWidget::saveParameters() const
    QSettings settings("AgCoelfen", "ShapeSim");
    settings.setIniCodec("UTF-8");
 
-   settings.setValue(tr("shapeParameters/layer_Surf"), static_cast<double>(surfLayerThicknessBox->value()));
-   settings.setValue(tr("shapeParameters/layer_Solv"), static_cast<double>(solvLayerThicknessBox->value()));
+   //settings.setValue(tr("shapeParameters/layer_Surf"), static_cast<double>(surfLayerThicknessBox->value()));
+   //settings.setValue(tr("shapeParameters/layer_Solv"), static_cast<double>(solvLayerThicknessBox->value()));
 
    settings.setValue(tr("shapeParameters/sphere/radMin"), static_cast<double>(sphereWidgetPtr->getRadMin()));
    settings.setValue(tr("shapeParameters/sphere/radMax"), static_cast<double>(sphereWidgetPtr->getRadMax()));
@@ -236,8 +226,8 @@ void ShaMainWidget::saveParameters() const
 
 #endif //INIT_PARAMETER_VARSETFUNC
 
-   INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Surf", surfLayerThicknessBox, "300.0");
-   INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Solv", solvLayerThicknessBox, "300.0");
+   //INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Surf", surfLayerThicknessBox, "300.0");
+   //INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Solv", solvLayerThicknessBox, "300.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/sphere/radMin", sphereWidgetPtr->setRadMin, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/sphere/radMax", sphereWidgetPtr->setRadMax, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisAlphaMin", prolateWidgetPtr->setAxAlphaMin, "1.0");
@@ -295,12 +285,15 @@ void ShaMainWidget::sphereCalculation(QVector<ldouble> &rad, QVector<ldouble> &c
    constexpr ldouble PI   = 3.141;
    constexpr ldouble tsPI = 3.141 * 3.0 / 4.0;
    constexpr ldouble kB   = 1.3806488e-23;
-   const ldouble dShell   = surfLayerThicknessBox->value();
-   const ldouble visc     = parFrame->getSolvVisc(); // from P to cP = m*Pa
-   const ldouble T        = parFrame->getTemperature();
-   const ldouble densCor  = parFrame->getCoreDensity();
-   const ldouble densSurf = parFrame->getSurfDensity();
-   const ldouble densSolv = parFrame->getSolvDensity();
+   //const double dShell = parFrame->
+   auto physPars = parFrame->getPhysicalParameters();
+
+   const ldouble dShell   = physPars.layerSurf;
+   const ldouble visc     = physPars.viscSolv; // from P to cP = m*Pa
+   const ldouble T        = physPars.temperature;
+   const ldouble densCor  = physPars.densCore;
+   const ldouble densSurf = physPars.densSurf;
+   const ldouble densSolv = physPars.densSolv;
    const ldouble DMeas    = parFrame->getDiffCoeff();
    const ldouble SMeas    = parFrame->getSedCoeff();
 
@@ -358,7 +351,14 @@ void ShaMainWidget::switchToProlate(bool chosen)
       shapeWidget->hide();
       shapeWidget = prolateWidgetPtr;
       shapeWidget->show();
-
+      /*
+      #include "qwt_plot_spectrogram.h"
+      #include "qwt_plot.h"
+      #include "qwt_plot_grid.h"
+      #include "qwt_plot_curve.h"
+      #include "qwt_color_map.h"
+      #include "qwt_raster_data.h"
+      */
       shapeResWidget->hide();
       shapeResWidget = prolateResWidgetPtr;
       shapeResWidget->show();
@@ -516,12 +516,7 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxAlphaMax(),
                prolateWidgetPtr->getAxBetaMin(),
                prolateWidgetPtr->getAxBetaMax(),
-               surfLayerThicknessBox->value(),
-               parFrame->getSolvVisc(),
-               parFrame->getTemperature(),
-               parFrame->getCoreDensity(),
-               parFrame->getSurfDensity(),
-               parFrame->getSolvDensity(),
+               parFrame->getPhysicalParameters(),
                parFrame->getDiffCoeff(),
                parFrame->getSedCoeff(),
                parFrame->getLSPRLambda(),
@@ -564,13 +559,8 @@ void ShaMainWidget::singleCalculation()
                prolateWidgetPtr->getAxAlphaMin(),
                prolateWidgetPtr->getAxAlphaMax(),
                prolateWidgetPtr->getAxBetaMin(),
-               prolateWidgetPtr->getAxBetaMax(),
-               surfLayerThicknessBox->value(),
-               parFrame->getSolvVisc(),
-               parFrame->getTemperature(),
-               parFrame->getCoreDensity(),
-               parFrame->getSurfDensity(),
-               parFrame->getSolvDensity(),
+               prolateWidgetPtr->getAxBetaMax(),               
+               parFrame->getPhysicalParameters(),
                parFrame->getDiffCoeff(),
                parFrame->getSedCoeff(),
                parFrame->getLSPRLambda(),
@@ -650,12 +640,9 @@ void ShaMainWidget::distrCalculation()
                      prolateWidgetPtr->getAxAlphaMax(),
                      prolateWidgetPtr->getAxBetaMin(),
                      prolateWidgetPtr->getAxBetaMax(),
-                     surfLayerThicknessBox->value(),
-                     parFrame->getSolvVisc(),
-                     parFrame->getTemperature(),
-                     parFrame->getCoreDensity(),
-                     parFrame->getSurfDensity(),
-                     parFrame->getSolvDensity(),
+                     //surfLayerThicknessBox->value(),
+                     parFrame->getPhysicalParameters(),
+                     //
                      distD[i],  //parFrame->getDiffCoeff(),
                      distS[i],  //parFrame->getSedCoeff(),
                      0.0,// parFrame->getLSPRLambda(),
@@ -693,12 +680,7 @@ void ShaMainWidget::distrCalculation()
                      longRodWidgetPtr->getAxAlphaMax(),
                      longRodWidgetPtr->getAxBetaMin(),
                      longRodWidgetPtr->getAxBetaMax(),
-                     surfLayerThicknessBox->value(),
-                     parFrame->getSolvVisc(),
-                     parFrame->getTemperature(),
-                     parFrame->getCoreDensity(),
-                     parFrame->getSurfDensity(),
-                     parFrame->getSolvDensity(),
+                     parFrame->getPhysicalParameters(),
                      distD[i],  //parFrame->getDiffCoeff(),
                      distS[i],  //parFrame->getSedCoeff(),
                      0.0,// parFrame->getLSPRLambda(),

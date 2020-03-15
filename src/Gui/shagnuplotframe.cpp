@@ -18,11 +18,10 @@ ShaGnuplotFrame::ShaGnuplotFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(pa
    QObject::connect(gnuplotPathChooser, SIGNAL(clicked()), this, SLOT(choosegnuplotPath()));
    lay->addWidget(gnuplotPathChooser, 1, 2, 1, 1);
    gnuplotPathName = new QLineEdit(this);
-   lay->addWidget(gnuplotPathName, 1, 3, 1, 12);https://www.youtube.com/watch?v=dFamObMUu2k
+   lay->addWidget(gnuplotPathName, 1, 3, 1, 12);
    QObject::connect(useGnuplotBox, SIGNAL(toggled(bool)), gnuplotPathChooser, SLOT(setEnabled(bool)));
    QObject::connect(useGnuplotBox, SIGNAL(toggled(bool)), gnuplotPathName, SLOT(setEnabled(bool)));
    loadSettings();
-
 }
 
 ShaGnuplotFrame::~ShaGnuplotFrame(){

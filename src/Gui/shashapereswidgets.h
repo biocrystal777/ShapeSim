@@ -28,8 +28,6 @@ private:
    //virtual ~ShaShapeResWidget(){}
 };
 
-
-
 class ShaNonSphereResWidget : public ShaShapeResWidget {
 public:
    ShaNonSphereResWidget(QWidget *parent) : ShaShapeResWidget(parent){}
@@ -60,7 +58,6 @@ public:
    ShaSphereResWidget& operator= (ShaSphereResWidget& src) = delete;
    ShaSphereResWidget(ShaSphereResWidget&& src) = delete;
    ShaSphereResWidget& operator= (ShaSphereResWidget&& src) = delete;
-
 
 
    inline ldouble getRadCore(bool *ok = nullptr) const {return radCoreBox->text().toDouble(ok);}

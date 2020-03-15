@@ -3,22 +3,10 @@
 
 #include <QtGlobal>
 
-#if QT_VERSION< 0x050000
-//#ifdef USE_QT_4_8
-#include <QWidget>
-#include <QSpinBox>
-#include <QDoubleSpinBox>
-#include <QBoxLayout>
-#include <QLabel>
-#else
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QSpinBox>
-//#include "ng doubleSpinBox"
 #include <QtWidgets/QBoxLayout>
 #include <QtWidgets/QLabel>
-#endif
-
-
 
 #include <cmath>
 #include "./shalog_omp.h"
@@ -26,7 +14,8 @@
 
 /**************************************************************
 ***
-***  FFFTwoBoxWidget (using Qt 4.8.2)
+***  FFFTwoBoxWidget
+***  \todo -----> exchange by newer Widget from AF4Eval project
 ***
 **************************************************************/
 
@@ -66,7 +55,7 @@ public:
 
 
    /*!
-     * \brief value returns the current value of the widget
+     * \brief value returns the current value of the widgetFFFTwoBoxWidget
      * \return value of the box
      */
 

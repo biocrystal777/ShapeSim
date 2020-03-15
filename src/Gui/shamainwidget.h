@@ -76,8 +76,6 @@ private:
    QFrame *shapeFrame               = nullptr;
    QGridLayout *shapeFrameLay       = nullptr;
 
-   QDoubleSpinBox* surfLayerThicknessBox = nullptr;
-   QDoubleSpinBox* solvLayerThicknessBox = nullptr;
    QComboBox *strideBox                  = nullptr;
 
 

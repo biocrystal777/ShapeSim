@@ -1,5 +1,6 @@
 #ifndef SHAPROLATECALCULATOR_H
 #define SHAPROLATECALCULATOR_H
+#include "./shaparamstructs.h"
 #include "./sharodlikescalculator.h"
 
 class ShaProlateCalculator final : public ShaRodLikesCalculator
@@ -11,12 +12,15 @@ public:
                         const ldouble axAlphaMax,
                         const ldouble axBetaMin,
                         const ldouble axBetaMax,
+                        const PhysicalParameters physPars,
+                        /*
                         const ldouble dShell,
                         const ldouble visc,
                         const ldouble T,
                         const ldouble densCore,
                         const ldouble densSurf,
                         const ldouble densSolv,
+                        */
                         const ldouble DMeas,
                         const ldouble SMeas,
                         const ldouble lamMeas,

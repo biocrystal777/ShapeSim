@@ -34,7 +34,7 @@ ShaParFrame::ShaParFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f)
    lay->addWidget(solvDensityBox, 2, 3, 1, 4);
 
    label = new QLabel(this);
-   label->setText(tr("η<sub>solvent</sub> [cP]:"));
+   label->setText(tr("η<sub>solv</sub> [cP]:"));
    lay->addWidget(label, 3, 0, 1, 3, Qt::AlignLeft);
    viscSolvBox = new QDoubleSpinBox(this);
    viscSolvBox->setDecimals(4);
@@ -47,6 +47,17 @@ ShaParFrame::ShaParFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f)
    temperatureBox->setMinimum(100.0);
    temperatureBox->setMaximum(500.0);
    lay->addWidget(temperatureBox, 4, 3, 1, 4);
+
+   label= new QLabel("layer<sub>surf</sub> [nm]:", this);
+   lay->addWidget(label, 1, 8, 1, 3);
+   surfLayerThicknessBox = new QDoubleSpinBox(this);
+   lay->addWidget(surfLayerThicknessBox, 1, 11, 1, 3);
+
+   label = new QLabel("layer<sub>solv</sub> [nm]:", this);
+   lay->addWidget(label, 2, 8, 1, 3);
+   solvLayerThicknessBox = new QDoubleSpinBox(this);
+   solvLayerThicknessBox->setEnabled(false);
+   lay->addWidget(solvLayerThicknessBox, 2, 11, 1, 3);
 
    singDistSwitchBox = new QGroupBox(QString("Evaluation Mode"), this);
    lay->addWidget(singDistSwitchBox, 5, 0, 2, 10);
@@ -101,6 +112,8 @@ void ShaParFrame::loadParameters()
    INIT_PARAMETER_LDOUBLE("expSettings/density_Solvent", solvDensityBox, "10.0");
    INIT_PARAMETER_LDOUBLE("expSettings/viscosity_Solvent", viscSolvBox, "10.0");
    INIT_PARAMETER_LDOUBLE("expSettings/Temperature", temperatureBox, "300.0");
+   INIT_PARAMETER_LDOUBLE("expSettings/thicknessSurfLayer", surfLayerThicknessBox, "1.0");
+   INIT_PARAMETER_LDOUBLE("expSettings/thicknessSolvLayer", solvLayerThicknessBox, "1.0");
 
 #undef INIT_PARAMETER_LDOUBLE
 
@@ -117,6 +130,8 @@ void ShaParFrame::saveParameters() const
    settings.setValue(tr("expSettings/density_Solvent"), solvDensityBox->value());
    settings.setValue(tr("expSettings/viscosity_Solvent"), viscSolvBox->value());
    settings.setValue(tr("expSettings/Temperature"), temperatureBox->value());
+   settings.setValue(tr("expSettings/thicknessSurfLayer"), surfLayerThicknessBox->value());
+   settings.setValue(tr("expSettings/thicknessSolvLayer"), solvLayerThicknessBox->value());
 
    if(singleSDPairWidget) singleSDPairWidget->saveParameters();
 }

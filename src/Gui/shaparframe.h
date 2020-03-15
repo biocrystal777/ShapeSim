@@ -10,6 +10,7 @@
 #include <QCheckBox>
 #include <QSettings>
 #include "./shatwoboxwidget.h"
+#include "../Core/shaparamstructs.h"
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QLineEdit>
@@ -129,11 +130,18 @@ public:
    inline bool    calcSinglePair()       const { return singleSwitcher->isChecked(); }
    inline bool    calcPairDistr()        const { return distrSwitcher->isChecked(); }
 
-   inline ldouble getCoreDensity()   const { return static_cast<ldouble>(coreDensityBox->value());   }
-   inline ldouble getSurfDensity()   const { return static_cast<ldouble>(surfDensityBox->value());   }
-   inline ldouble getSolvDensity()   const { return static_cast<ldouble>(solvDensityBox->value());   }
-   inline ldouble getSolvVisc()      const { return static_cast<ldouble>(viscSolvBox->value());      }
-   inline ldouble getTemperature()   const { return static_cast<ldouble>(temperatureBox->value());   }
+   PhysicalParameters getPhysicalParameters() const {
+      return PhysicalParameters {
+         static_cast<ldouble>(coreDensityBox->value()),
+               static_cast<ldouble>(surfDensityBox->value()),
+               static_cast<ldouble>(solvDensityBox->value()),
+               static_cast<ldouble>(viscSolvBox->value()),
+               static_cast<ldouble>(temperatureBox->value()),
+               static_cast<ldouble>(surfLayerThicknessBox->value()),
+               static_cast<ldouble>(solvLayerThicknessBox->value())
+      };
+   }
+
    inline ldouble getDiffCoeff()     const { return this->singleSDPairWidget->getDiffCoeff();        }
    inline ldouble getSedCoeff()      const { return this->singleSDPairWidget->getSedCoeff();         }
    inline ldouble getLSPRLambda()    const { return this->singleSDPairWidget->getLSPRLambda();       }
@@ -157,6 +165,9 @@ private:
    QDoubleSpinBox *solvDensityBox   = nullptr;
    QDoubleSpinBox *viscSolvBox      = nullptr;
    QDoubleSpinBox *temperatureBox   = nullptr;
+   QDoubleSpinBox* surfLayerThicknessBox = nullptr;
+   QDoubleSpinBox* solvLayerThicknessBox = nullptr;
+
 
    QGroupBox *singDistSwitchBox              = nullptr;
    QHBoxLayout *singDistLay                  = nullptr;

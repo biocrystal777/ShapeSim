@@ -1,7 +1,7 @@
 #ifndef SHALONGRODCALCULATOR_H
 #define SHALONGRODCALCULATOR_H
-
 #include "./sharodlikescalculator.h"
+#include "./shaparamstructs.h"
 
 class ShaLongRodCalculator final : public ShaRodLikesCalculator
 {
@@ -12,12 +12,8 @@ public:
                         const ldouble axAlphaMax,
                         const ldouble axBetaMin,
                         const ldouble axBetaMax,
-                        const ldouble dShell,
-                        const ldouble visc,
-                        const ldouble T,
-                        const ldouble densCore,
-                        const ldouble densSurf,
-                        const ldouble densSolv,
+                        const PhysicalParameters physPars,
+                        //
                         const ldouble DMeas,
                         const ldouble SMeas,
                         const ldouble lamMeas,

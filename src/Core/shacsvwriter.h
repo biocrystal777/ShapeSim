@@ -39,7 +39,6 @@ public:
     */
    ~ShaCsvWriter(){}
 
-
    /*!
     * \brief writeFile The function has to be called to write the file to the path stated above
     * \param data dataMatrix to be written. Format has to be data->at(column)->at(row).
