@@ -1,43 +1,11 @@
 #include "shashapeparwidgets.h"
-/*
-ShaSphereParWidget::ShaSphereParWidget(QWidget *parent) : ShaShapeParWidget(parent)
-{
-   QLabel *label = new QLabel(this);
-   label->setText(tr("coreRadius<sub>min</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 0, 1, 3);
-   radMinBox = new QDoubleSpinBox(this);
-   radMinBox->setMinimum(0.0);
-   radMinBox->setMaximum(999.5);
-   shapeLay->addWidget(radMinBox, 1, 3, 1, 3);
+
+ShaShapeParWidget::ShaShapeParWidget( QWidget *parent ) : QWidget(parent){
+   shapeLay = new QGridLayout(this);
+   QLabel *label = new QLabel(tr("<b>Limits:</b>"), this);
+   shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
 
    label = new QLabel(this);
-   label->setText(tr("coreRadius<sub>max</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 6, 1, 3);
-   radMaxBox = new QDoubleSpinBox(this);
-   radMaxBox->setMinimum(0.5);
-   radMaxBox->setMaximum(1000.0);
-   shapeLay->addWidget(radMaxBox, 1, 9, 1, 3);
-
-   QObject::connect(radMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureRadMinDistance(double)));
-   QObject::connect(radMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureRadMaxDistance(double)));
-}
-
-void ShaSphereParWidget::ensureRadMaxDistance( double radMin)
-{
-   ldouble radMax = radMaxBox->value();
-   if(radMax <= radMin) radMaxBox->setValue(radMin + 0.5);
-}
-
-void ShaSphereParWidget::ensureRadMinDistance( double radMax)
-{
-   ldouble radMin = radMinBox->value();
-   if(radMax <= radMin) radMinBox->setValue(radMax - 0.5);
-}
-
-*/
-ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
-{
-   QLabel *label = new QLabel(this);
    label->setText(tr("coreAxisAlpha<sub>min</sub> [nm]:"));
    shapeLay->addWidget(label, 1, 0, 1, 3);
    axAlphaMinBox = new QDoubleSpinBox(this);
@@ -68,6 +36,10 @@ ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(pa
    axBetaMaxBox->setMinimum(0.5);
    axBetaMaxBox->setMaximum(1000.0);
    shapeLay->addWidget(axBetaMaxBox, 2, 9, 1, 3);
+}
+
+ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
+{
 
    QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
    QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
@@ -105,37 +77,6 @@ void ShaProlateParWidget::ensureBetaMinDistance( double betaMax)
 
 ShaOblateParWidget::ShaOblateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
-   QLabel *label = new QLabel(this);
-   label->setText(tr("coreAxisAlpha<sub>min</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 0, 1, 3);
-   axAlphaMinBox = new QDoubleSpinBox(this);
-   axAlphaMinBox->setMinimum(0.0);
-   axAlphaMinBox->setMaximum(999.5);
-   shapeLay->addWidget(axAlphaMinBox, 1, 3, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisAlpha<sub>max</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 6, 1, 3);
-   axAlphaMaxBox = new QDoubleSpinBox(this);
-   axAlphaMaxBox->setMinimum(0.5);
-   axAlphaMaxBox->setMaximum(1000.0);
-   shapeLay->addWidget(axAlphaMaxBox, 1, 9, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisBeta<sub>min</sub> [nm]:"));
-   shapeLay->addWidget(label, 2, 0, 1, 3);
-   axBetaMinBox = new QDoubleSpinBox(this);
-   axBetaMinBox->setMinimum(0.0);
-   axBetaMinBox->setMaximum(999.5);
-   shapeLay->addWidget(axBetaMinBox, 2, 3, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisBeta<sub>max</sub> [nm]:"));
-   shapeLay->addWidget(label, 2, 6, 1, 3);
-   axBetaMaxBox = new QDoubleSpinBox(this);
-   axBetaMaxBox->setMinimum(0.5);
-   axBetaMaxBox->setMaximum(1000.0);
-   shapeLay->addWidget(axBetaMaxBox, 2, 9, 1, 3);
 
    QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
    QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
@@ -173,38 +114,6 @@ void ShaOblateParWidget::ensureBetaMinDistance( double betaMax)
 
 ShaLongRodParWidget::ShaLongRodParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
-   QLabel *label = new QLabel(this);
-   label->setText(tr("coreAxisAlpha<sub>min</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 0, 1, 3);
-   axAlphaMinBox = new QDoubleSpinBox(this);
-   axAlphaMinBox->setMinimum(0.0);
-   axAlphaMinBox->setMaximum(999.5);
-   shapeLay->addWidget(axAlphaMinBox, 1, 3, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisAlpha<sub>max</sub> [nm]:"));
-   shapeLay->addWidget(label, 1, 6, 1, 3);
-   axAlphaMaxBox = new QDoubleSpinBox(this);
-   axAlphaMaxBox->setMinimum(0.5);
-   axAlphaMaxBox->setMaximum(1000.0);
-   shapeLay->addWidget(axAlphaMaxBox, 1, 9, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisBeta<sub>min</sub> [nm]:"));
-   shapeLay->addWidget(label, 2, 0, 1, 3);
-   axBetaMinBox = new QDoubleSpinBox(this);
-   axBetaMinBox->setMinimum(0.0);
-   axBetaMinBox->setMaximum(999.5);
-   shapeLay->addWidget(axBetaMinBox, 2, 3, 1, 3);
-
-   label = new QLabel(this);
-   label->setText(tr("coreAxisBeta<sub>max</sub> [nm]:"));
-   shapeLay->addWidget(label, 2, 6, 1, 3);
-   axBetaMaxBox = new QDoubleSpinBox(this);
-   axBetaMaxBox->setMinimum(0.5);
-   axBetaMaxBox->setMaximum(1000.0);
-   shapeLay->addWidget(axBetaMaxBox, 2, 9, 1, 3);
-
    QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
    QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
    QObject::connect(axBetaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMinDistance(double)));

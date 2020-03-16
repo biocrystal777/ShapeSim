@@ -12,11 +12,7 @@
 class ShaShapeParWidget : public QWidget {
    Q_OBJECT
 public:
-   ShaShapeParWidget(QWidget *parent = 0) : QWidget(parent){
-      shapeLay = new QGridLayout(this);
-      QLabel *label = new QLabel(tr("<b>Limits:</b>"), this);
-      shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
-   }
+  ShaShapeParWidget(QWidget *parent = nullptr);
 
    inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
    inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
@@ -30,18 +26,14 @@ public:
 protected:
    virtual ~ShaShapeParWidget(){}
 
-   QGridLayout *shapeLay;
+   QGridLayout    *shapeLay;
    QDoubleSpinBox *axAlphaMinBox;
    QDoubleSpinBox *axAlphaMaxBox;
    QDoubleSpinBox *axBetaMinBox;
    QDoubleSpinBox *axBetaMaxBox;
 
-   private:
-   ShaShapeParWidget(const ShaShapeParWidget& src) = delete;
-   ShaShapeParWidget& operator= (ShaShapeParWidget& src) = delete;
-   ShaShapeParWidget(ShaShapeParWidget&& src) = delete;
-   ShaShapeParWidget& operator= (ShaShapeParWidget&& src) = delete;
-
+private:
+   NO_COPY_ASSIGNMENT_CTORS(ShaShapeParWidget)
 };
 
 class ShaProlateParWidget : public ShaShapeParWidget {
@@ -49,17 +41,15 @@ class ShaProlateParWidget : public ShaShapeParWidget {
 public:
    ShaProlateParWidget(QWidget *parent = 0);
    ~ShaProlateParWidget(){}
-   ShaProlateParWidget(const ShaProlateParWidget& src) = delete;
-   ShaProlateParWidget& operator= (ShaProlateParWidget& src) = delete;
-   ShaProlateParWidget(ShaProlateParWidget&& src) = delete;
-   ShaProlateParWidget& operator= (ShaProlateParWidget&& src) = delete;
-
 
 protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
    void ensureAlphaMaxDistance( double AlphMin);
    void ensureBetaMinDistance( double BetaMax);
    void ensureBetaMaxDistance( double BetaMin);
+
+private:
+   NO_COPY_ASSIGNMENT_CTORS(ShaProlateParWidget)
 };
 
 class ShaOblateParWidget : public ShaShapeParWidget {
@@ -67,18 +57,16 @@ class ShaOblateParWidget : public ShaShapeParWidget {
 public:
    ShaOblateParWidget(QWidget *parent = 0);
    ~ShaOblateParWidget(){}
-   ShaOblateParWidget(const ShaOblateParWidget& src) = delete;
-   ShaOblateParWidget& operator= (ShaOblateParWidget& src) = delete;
-   ShaOblateParWidget(ShaOblateParWidget&& src) = delete;
-   ShaOblateParWidget& operator= (ShaOblateParWidget&& src) = delete;
 
-
-
-   protected slots:
+protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
    void ensureAlphaMaxDistance( double AlphMin);
    void ensureBetaMinDistance( double BetaMax);
    void ensureBetaMaxDistance( double BetaMin);
+
+private:
+
+   NO_COPY_ASSIGNMENT_CTORS(ShaOblateParWidget)
 };
 
 class ShaLongRodParWidget : public ShaShapeParWidget {
@@ -86,16 +74,15 @@ class ShaLongRodParWidget : public ShaShapeParWidget {
 public:
    ShaLongRodParWidget(QWidget *parent = 0);
    ~ShaLongRodParWidget(){}
-   ShaLongRodParWidget(const ShaLongRodParWidget& src) = delete;
-   ShaLongRodParWidget& operator= (ShaLongRodParWidget& src) = delete;
-   ShaLongRodParWidget(ShaLongRodParWidget&& src) = delete;
-   ShaLongRodParWidget& operator= (ShaLongRodParWidget&& src) = delete;
 
    protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
    void ensureAlphaMaxDistance( double AlphMin);
    void ensureBetaMinDistance( double BetaMax);
    void ensureBetaMaxDistance( double BetaMin);
+
+private:
+   NO_COPY_ASSIGNMENT_CTORS(ShaLongRodParWidget)
 };
 
 #endif // SHASHAPEPARWIDGETS_H
