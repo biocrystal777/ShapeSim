@@ -1,5 +1,5 @@
 #include "shashapereswidgets.h"
-
+/*
 ShaSphereResWidget::ShaSphereResWidget(QWidget *parent) : ShaShapeResWidget(parent)
 {
    QLabel *label = new QLabel(this);
@@ -16,6 +16,7 @@ ShaSphereResWidget::ShaSphereResWidget(QWidget *parent) : ShaShapeResWidget(pare
    radTotBox->setReadOnly(true);
    shapeLay->addWidget(radTotBox, 2, 3, 1, 3);
 }
+*/
 
 ShaProlateResWidget::ShaProlateResWidget(QWidget *parent) : ShaNonSphereResWidget(parent)
 {

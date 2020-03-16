@@ -11,6 +11,7 @@ using std::string;
 ShaMainWidget::ShaMainWidget(QWidget *parent)
    : QWidget(parent)
 {
+   qDebug() << 1;
    thisLay = new QGridLayout(this);
 
    parFrame = new ShaParFrame(this);
@@ -31,10 +32,7 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
 
    shapeGroupBox = new QGroupBox(tr("Shape"),shapeFrame);
    shapeSwitchLay = new QGridLayout(shapeGroupBox);
-   sphereSwitch = new QRadioButton(tr("Sphere"), shapeGroupBox);
-   //sphereSwitch->setChecked(true);
-   sphereSwitch->setDisabled(true);
-   shapeSwitchLay->addWidget(sphereSwitch, 0, 0, 1, 3);
+
    prolateSwitch = new QRadioButton(tr("Prolate"), shapeGroupBox);
    prolateSwitch->setChecked(true);
    shapeSwitchLay->addWidget(prolateSwitch, 0, 3, 1, 3);
@@ -46,12 +44,13 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    //longRodSwitch->setDisabled(true); // TEST
    shapeFrameLay->addWidget(shapeGroupBox, 2, 0, 2, 12, Qt::AlignTop);
 
-   sphereWidgetPtr = new ShaSphereParWidget(shapeFrame);
-   shapeWidget = sphereWidgetPtr;
-   shapeFrameLay->addWidget(sphereWidgetPtr, 4, 0, 4, 12);
+   //reWidgetPtr = new ShaSphereParWidget(shapeFrame);
+   //shapeWidget = sphereWidgetPtr;
+   //shapeFrameLay->addWidget(sphereWidgetPtr, 4, 0, 4, 12);
    prolateWidgetPtr = new ShaProlateParWidget(shapeFrame);
    shapeFrameLay->addWidget(prolateWidgetPtr, 4, 0, 4, 12);
    prolateWidgetPtr->hide();
+   shapeWidget = prolateWidgetPtr;
    oblateWidgetPtr = new ShaOblateParWidget(shapeFrame);
    shapeFrameLay->addWidget(oblateWidgetPtr, 4, 0, 4, 12);
    oblateWidgetPtr->hide();
@@ -71,10 +70,9 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    strideBox->addItem("0.1");
    strideBox->addItem("0.05");
    strideBox->addItem("0.02");
-   //strideBox->addItem("0.01");
-   //strideBox->addItem("0.005");
-   thisLay->addWidget(strideBox, 12, 11, 1, 2);
 
+   thisLay->addWidget(strideBox, 12, 11, 1, 2);
+qDebug() << 2;
    startButton = new QPushButton(tr("Calculate"), this);
    QObject::connect(startButton, SIGNAL(clicked()), this, SLOT(startCalculation()));
    thisLay->addWidget(startButton, 12, 3, 1, 6);
@@ -89,12 +87,10 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    outPutDir = new QLineEdit(outputFrame);
    outputLay->addWidget(outPutDir, 0, 2, 1, 7);
 
-   sphereResWidgetPtr = new ShaSphereResWidget(outputFrame);
-   shapeResWidget = sphereResWidgetPtr;
-   outputLay->addWidget(sphereResWidgetPtr, 1,3, 1, 7, Qt::AlignCenter);
    prolateResWidgetPtr = new ShaProlateResWidget(outputFrame);
    outputLay->addWidget(prolateResWidgetPtr, 1, 3, 1, 7, Qt::AlignCenter);
-   prolateResWidgetPtr->hide();
+   prolateResWidgetPtr->hide();   
+   shapeResWidget = prolateResWidgetPtr;
    oblateResWidgetPtr = new ShaOblateResWidget(outputFrame);
    outputLay->addWidget(oblateResWidgetPtr, 1, 3, 1, 7, Qt::AlignCenter);
    oblateResWidgetPtr->hide();
@@ -134,12 +130,12 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    thisLay->addWidget(logWidget, 21, 0, 10,15);
 
    this->loadParameters();
-
-   QObject::connect(sphereSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToSphere(bool)));
+qDebug() << 3;
    QObject::connect(prolateSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToProlate(bool)));
    QObject::connect(oblateSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToOblate(bool)));
    QObject::connect(longRodSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToLongRod(bool)));
    switchToProlate(true);
+   qDebug() << 4;
 }
 
 ShaMainWidget::~ShaMainWidget()
@@ -151,12 +147,6 @@ void ShaMainWidget::saveParameters() const
 {
    QSettings settings("AgCoelfen", "ShapeSim");
    settings.setIniCodec("UTF-8");
-
-   //settings.setValue(tr("shapeParameters/layer_Surf"), static_cast<double>(surfLayerThicknessBox->value()));
-   //settings.setValue(tr("shapeParameters/layer_Solv"), static_cast<double>(solvLayerThicknessBox->value()));
-
-   settings.setValue(tr("shapeParameters/sphere/radMin"), static_cast<double>(sphereWidgetPtr->getRadMin()));
-   settings.setValue(tr("shapeParameters/sphere/radMax"), static_cast<double>(sphereWidgetPtr->getRadMax()));
 
    settings.setValue(tr("shapeParameters/prolate/axisAlphaMin"), static_cast<double>(prolateWidgetPtr->getAxAlphaMin()));
    settings.setValue(tr("shapeParameters/prolate/axisAlphaMax"), static_cast<double>(prolateWidgetPtr->getAxAlphaMax()));
@@ -226,10 +216,7 @@ void ShaMainWidget::saveParameters() const
 
 #endif //INIT_PARAMETER_VARSETFUNC
 
-   //INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Surf", surfLayerThicknessBox, "300.0");
-   //INIT_PARAMETER_LDOUBLE("shapeParameters/layer_Solv", solvLayerThicknessBox, "300.0");
-   INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/sphere/radMin", sphereWidgetPtr->setRadMin, "1.0");
-   INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/sphere/radMax", sphereWidgetPtr->setRadMax, "1.0");
+
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisAlphaMin", prolateWidgetPtr->setAxAlphaMin, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisAlphaMax", prolateWidgetPtr->setAxAlphaMax, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisBetaMin", prolateWidgetPtr->setAxBetaMin, "1.0");
@@ -265,93 +252,17 @@ void ShaMainWidget::startCalculation()
 
 }
 
-void ShaMainWidget::sphereCalculation(QVector<ldouble> &rad, QVector<ldouble> &chiSq
-                                      //ShaMainWidget::chiSqType minMode
-                                      )
-{
-
-   ldouble rMin = sphereWidgetPtr->getRadMin();
-   ldouble rMax = sphereWidgetPtr->getRadMax();
-   ldouble stride = strideBox->currentText().toDouble();
-
-   createVectorFromTo(rad, rMin, rMax, stride);
-
-   //for(int i = 0; i < rad.size(); ++i) qDebug() << i  << rad[i];
-
-   int gridLength = rad.size();
-   chiSq = QVector<ldouble>(gridLength);
-   // get Variables:
-
-   constexpr ldouble PI   = 3.141;
-   constexpr ldouble tsPI = 3.141 * 3.0 / 4.0;
-   constexpr ldouble kB   = 1.3806488e-23;
-
-   auto physPars = parFrame->getPhysicalParameters();
-   const ldouble dShell   = physPars.layerSurf;
-   const ldouble visc     = physPars.viscSolv; // from P to cP = m*Pa
-   const ldouble T        = physPars.temperature;
-   const ldouble densCor  = physPars.densCore;
-   const ldouble densSurf = physPars.densSurf;
-   const ldouble densSolv = physPars.densSolv;
-
-   auto measPars = parFrame->getMeasurementParameters();
-   const ldouble DMeas    = measPars.DMeas;
-   const ldouble SMeas    = measPars.sMeas;
-
-   QVector<ldouble> densParticle(gridLength);
-   for(int i = 0; i < gridLength; ++i){
-      ldouble coreRad = rad[i];
-      ldouble totRad = coreRad + dShell;
-      ldouble coreVol = tsPI * pow(coreRad, 3.0);
-      ldouble totVol = tsPI * pow(totRad, 3.0);
-      ldouble surfLayerVol = totVol - coreVol;
-      ldouble volPartialCore = coreVol / totVol;
-      ldouble volPartialSurfLay = surfLayerVol / totVol;
-      densParticle[i] = volPartialCore * densCor + volPartialSurfLay * densSurf;
-      ldouble SCalc = 4 * totRad * totRad * (densParticle[i] - densSolv) / (18 * visc);
-      SCalc *= 1e1;                                                                     // adapt units
-      ldouble DCalc = ( kB * T ) / (6.0 * PI * visc * rad[i]);
-      DCalc *= 1e16;                                                                    // adapt units
-      ldouble chiSqTmpS = (SMeas - SCalc) / SMeas;
-      chiSqTmpS *= chiSqTmpS;
-      ldouble chiSqTmpD = (DMeas - DCalc) / DMeas;
-      chiSqTmpD *= chiSqTmpD;
-      ldouble chiSqTmp = chiSqTmpS + chiSqTmpD;
-      chiSq [ i ] = chiSqTmp;
-   }
-   ldouble minChiSq = -666.0;
-   int minChiSqPos = minAt(chiSq, &minChiSq);
-
-   outRhoBox->setText(QString::number(densParticle[minChiSqPos],'f', 2));
-   outChiSqBox->setText(QString::number(minChiSq,'f', 5));
-   sphereResWidgetPtr->setRadCore(rad[minChiSqPos]);
-   sphereResWidgetPtr->setRadTot(rad[minChiSqPos] + dShell);
-
-
-   outPBox->setText(tr("     ---   "));
-   outff0Box->setText(tr("     ---   "));
-}
-
-void ShaMainWidget::switchToSphere(bool chosen)
-{
-   if(chosen){
-      shapeWidget->hide();
-      shapeWidget = sphereWidgetPtr;
-      shapeWidget->show();
-
-      shapeResWidget->hide();
-      shapeResWidget = sphereResWidgetPtr;
-      shapeResWidget->show();
-      //shapeFrameLay->addWidget(shapeWidget, 2, 0, 4, 12);
-   }
-}
 
 void ShaMainWidget::switchToProlate(bool chosen)
 {
    if(chosen){
+      qDebug() << 11 <<  shapeWidget;
+
       shapeWidget->hide();
+      qDebug() << 12;
       shapeWidget = prolateWidgetPtr;
       shapeWidget->show();
+      qDebug() << 12;
       shapeResWidget->hide();
       shapeResWidget = prolateResWidgetPtr;
       shapeResWidget->show();
@@ -490,12 +401,7 @@ vector<doublePair> ShaMainWidget::findCrossMinima(vector<vector<doublePair> > &d
 void ShaMainWidget::singleCalculation()
 {
 
-   if(sphereSwitch->isChecked()){
-      QVector<ldouble> rads;
-      QVector<ldouble> chiSqs;
-      sphereCalculation(rads, chiSqs);
-   }
-   else if(prolateSwitch->isChecked()) {
+   if(prolateSwitch->isChecked()) {
       QVector<ldouble> axAlpha;
       QVector<ldouble> axBeta;
       QVector<QVector<ldouble> > chiSqD;
@@ -519,9 +425,6 @@ void ShaMainWidget::singleCalculation()
 
       //outRhoBox->setText(QString::number(densParticle[minChiSqPos],'f', 2));
       //outChiSqBox->setText(QString::number(minChiSq,'f', 5));
-      //sphereResWidgetPtr->setRadCore(rad[minChiSqPos]);
-      //sphereResWidgetPtr->setRadTot(rad[minChiSqPos] + dShell);
-
 
       //outPBox->setText(tr("     ---   "));
       //outff0Box->setText(tr("     ---   "));

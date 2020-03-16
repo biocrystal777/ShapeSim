@@ -82,13 +82,13 @@ private:
 
    QGroupBox *shapeGroupBox              = nullptr;
    QGridLayout *shapeSwitchLay           = nullptr;
-   QRadioButton *sphereSwitch            = nullptr;
+   //QRadioButton *sphereSwitch            = nullptr;
    QRadioButton *prolateSwitch           = nullptr;
    QRadioButton *oblateSwitch            = nullptr;
    QRadioButton *longRodSwitch           = nullptr;
 
    ShaShapeParWidget *shapeWidget        = nullptr;
-   ShaSphereParWidget *sphereWidgetPtr   = nullptr;
+   //ShaSphereParWidget *sphereWidgetPtr   = nullptr;
    ShaProlateParWidget *prolateWidgetPtr = nullptr;
    ShaOblateParWidget *oblateWidgetPtr   = nullptr;
    ShaLongRodParWidget *longRodWidgetPtr = nullptr;
@@ -108,18 +108,19 @@ private:
    QLineEdit *outPutDir                  = nullptr;
 
    ShaShapeResWidget *shapeResWidget         = nullptr;
-   ShaSphereResWidget *sphereResWidgetPtr    = nullptr;
+   //ShaSphereResWidget *sphereResWidgetPtr    = nullptr;
    ShaProlateResWidget *prolateResWidgetPtr  = nullptr;
    ShaOblateResWidget *oblateResWidgetPtr    = nullptr;
    ShaLongRodResWidget *longRodResWidgetPtr  = nullptr;
 
    // log Widget
    ShaLog *logWidget = nullptr;
-
+/*
    void sphereCalculation(QVector<ldouble> &rad,
                           QVector<ldouble> &chiSq
                           //chiSqType minMode
                           );
+*/
 
    void createVectorFromTo(QVector<ldouble> &v, ldouble min, ldouble max, ldouble stride);
    int minAt(const QVector<ldouble> &v, ldouble *val = nullptr) const;
@@ -141,7 +142,7 @@ private slots:
    void startCalculation();
     void saveParameters() const;
 
-   void switchToSphere(bool chosen);
+   //void switchToSphere(bool chosen);
    void switchToProlate(bool chosen);
    void switchToOblate(bool chosen);
    void switchToLongRod(bool chosen);

@@ -48,7 +48,7 @@ public:
 private:
 
 };
-
+/*
 class ShaSphereResWidget : public ShaShapeResWidget {
    Q_OBJECT
 public:
@@ -69,6 +69,7 @@ protected:
    QLineEdit *radCoreBox;
    QLineEdit *radTotBox;
 };
+*/
 
 class ShaProlateResWidget : public ShaNonSphereResWidget {
    Q_OBJECT

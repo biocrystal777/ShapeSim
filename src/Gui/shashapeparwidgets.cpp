@@ -1,5 +1,5 @@
 #include "shashapeparwidgets.h"
-
+/*
 ShaSphereParWidget::ShaSphereParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
    QLabel *label = new QLabel(this);
@@ -34,7 +34,7 @@ void ShaSphereParWidget::ensureRadMinDistance( double radMax)
    if(radMax <= radMin) radMinBox->setValue(radMax - 0.5);
 }
 
-
+*/
 ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
    QLabel *label = new QLabel(this);

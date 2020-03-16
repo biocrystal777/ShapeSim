@@ -17,37 +17,31 @@ public:
       QLabel *label = new QLabel(tr("<b>Limits:</b>"), this);
       shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
    }
+
+   inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
+   inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
+   inline ldouble getAxAlphaMax() const {return axAlphaMaxBox->value();}
+   inline void setAxAlphaMax(const ldouble val) {axAlphaMaxBox->setValue(val);}
+   inline ldouble getAxBetaMin() const {return axBetaMinBox->value();}
+   inline void setAxBetaMin(const ldouble val) {axBetaMinBox->setValue(val);}
+   inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
+   inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
+
+protected:
+   virtual ~ShaShapeParWidget(){}
+
+   QGridLayout *shapeLay;
+   QDoubleSpinBox *axAlphaMinBox;
+   QDoubleSpinBox *axAlphaMaxBox;
+   QDoubleSpinBox *axBetaMinBox;
+   QDoubleSpinBox *axBetaMaxBox;
+
+   private:
    ShaShapeParWidget(const ShaShapeParWidget& src) = delete;
    ShaShapeParWidget& operator= (ShaShapeParWidget& src) = delete;
    ShaShapeParWidget(ShaShapeParWidget&& src) = delete;
    ShaShapeParWidget& operator= (ShaShapeParWidget&& src) = delete;
-protected:
-   virtual ~ShaShapeParWidget(){}
-   QGridLayout *shapeLay;
-};
 
-class ShaSphereParWidget : public ShaShapeParWidget {
-   Q_OBJECT
-public:
-   ShaSphereParWidget(QWidget *parent = 0);
-   ~ShaSphereParWidget(){}
-   ShaSphereParWidget(const ShaSphereParWidget& src) = delete;
-   ShaSphereParWidget& operator= (ShaSphereParWidget& src) = delete;
-   ShaSphereParWidget(ShaSphereParWidget&& src) = delete;
-   ShaSphereParWidget& operator= (ShaSphereParWidget&& src) = delete;
-
-   inline ldouble getRadMin() const {return radMinBox->value();}
-   inline void setRadMin(const ldouble val) {radMinBox->setValue(val);}
-   inline ldouble getRadMax() const {return radMaxBox->value();}
-   inline void setRadMax(const ldouble val) {radMaxBox->setValue(val);}
-
-protected:
-   QDoubleSpinBox *radMinBox;
-   QDoubleSpinBox *radMaxBox;
-
-protected slots:
-   void ensureRadMinDistance( double radMax);
-   void ensureRadMaxDistance( double radMin);
 };
 
 class ShaProlateParWidget : public ShaShapeParWidget {
@@ -60,20 +54,6 @@ public:
    ShaProlateParWidget(ShaProlateParWidget&& src) = delete;
    ShaProlateParWidget& operator= (ShaProlateParWidget&& src) = delete;
 
-   inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
-   inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
-   inline ldouble getAxAlphaMax() const {return axAlphaMaxBox->value();}
-   inline void setAxAlphaMax(const ldouble val) {axAlphaMaxBox->setValue(val);}
-   inline ldouble getAxBetaMin() const {return axBetaMinBox->value();}
-   inline void setAxBetaMin(const ldouble val) {axBetaMinBox->setValue(val);}
-   inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
-   inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
-
-protected:
-   QDoubleSpinBox *axAlphaMinBox;
-   QDoubleSpinBox *axAlphaMaxBox;
-   QDoubleSpinBox *axBetaMinBox;
-   QDoubleSpinBox *axBetaMaxBox;
 
 protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
@@ -92,20 +72,7 @@ public:
    ShaOblateParWidget(ShaOblateParWidget&& src) = delete;
    ShaOblateParWidget& operator= (ShaOblateParWidget&& src) = delete;
 
-   inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
-   inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
-   inline ldouble getAxAlphaMax() const {return axAlphaMaxBox->value();}
-   inline void setAxAlphaMax(const ldouble val) {axAlphaMaxBox->setValue(val);}
-   inline ldouble getAxBetaMin() const {return axBetaMinBox->value();}
-   inline void setAxBetaMin(const ldouble val) {axBetaMinBox->setValue(val);}
-   inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
-   inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
 
-protected:
-   QDoubleSpinBox *axAlphaMinBox;
-   QDoubleSpinBox *axAlphaMaxBox;
-   QDoubleSpinBox *axBetaMinBox;
-   QDoubleSpinBox *axBetaMaxBox;
 
    protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
@@ -123,21 +90,6 @@ public:
    ShaLongRodParWidget& operator= (ShaLongRodParWidget& src) = delete;
    ShaLongRodParWidget(ShaLongRodParWidget&& src) = delete;
    ShaLongRodParWidget& operator= (ShaLongRodParWidget&& src) = delete;
-
-   inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
-   inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
-   inline ldouble getAxAlphaMax() const {return axAlphaMaxBox->value();}
-   inline void setAxAlphaMax(const ldouble val) {axAlphaMaxBox->setValue(val);}
-   inline ldouble getAxBetaMin() const {return axBetaMinBox->value();}
-   inline void setAxBetaMin(const ldouble val) {axBetaMinBox->setValue(val);}
-   inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
-   inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
-
-protected:
-   QDoubleSpinBox *axAlphaMinBox;
-   QDoubleSpinBox *axAlphaMaxBox;
-   QDoubleSpinBox *axBetaMinBox;
-   QDoubleSpinBox *axBetaMaxBox;
 
    protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
