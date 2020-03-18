@@ -7,11 +7,7 @@ class ShaProlateCalculator final : public ShaRodLikesCalculator
 {
 public:
    ShaProlateCalculator(const QString &outPutDirPath,
-                        const ldouble stride,
-                        const ldouble axAlphaMin,
-                        const ldouble axAlphaMax,
-                        const ldouble axBetaMin,
-                        const ldouble axBetaMax,
+                        const GridParameters gridpars,
                         const PhysicalParameters physPars,
                         const MeasurementParamaters measPars,
                         const bool useGnuplot,

@@ -1,5 +1,5 @@
-#ifndef SHASHAPERESWIDGETS_H
-#define SHASHAPERESWIDGETS_H
+#ifndef SHASHAPERESULTSWIDGETS_H
+#define SHASHAPERESULTSWIDGETS_H
 #include "./shadefinitions.h"
 
 #include <QtGlobal>
@@ -9,28 +9,28 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 
-class ShaShapeResWidget : public QWidget {
+class ShaShapeResultsWidget : public QWidget {
    Q_OBJECT
 public:
-   ShaShapeResWidget(QWidget *parent = 0) : QWidget(parent){
+   ShaShapeResultsWidget(QWidget *parent = 0) : QWidget(parent){
       shapeLay = new QGridLayout(this);
       QLabel *label = new QLabel(tr("<b>Sizes:</b>"), this);
       shapeLay->addWidget(label, 0, 4, 1, 3, Qt::AlignCenter);
    }
-   virtual ~ShaShapeResWidget(){}
-   ShaShapeResWidget(const ShaShapeResWidget& src) = delete;
-   ShaShapeResWidget& operator= (ShaShapeResWidget& src) = delete;
-   ShaShapeResWidget(ShaShapeResWidget&& src) = delete;
-   ShaShapeResWidget& operator= (ShaShapeResWidget&& src) = delete;
+   virtual ~ShaShapeResultsWidget(){}
+   ShaShapeResultsWidget(const ShaShapeResultsWidget& src) = delete;
+   ShaShapeResultsWidget& operator= (ShaShapeResultsWidget& src) = delete;
+   ShaShapeResultsWidget(ShaShapeResultsWidget&& src) = delete;
+   ShaShapeResultsWidget& operator= (ShaShapeResultsWidget&& src) = delete;
 protected:
    QGridLayout *shapeLay;
 private:
    //virtual ~ShaShapeResWidget(){}
 };
 
-class ShaNonSphereResWidget : public ShaShapeResWidget {
+class ShaNonSphereResWidget : public ShaShapeResultsWidget {
 public:
-   ShaNonSphereResWidget(QWidget *parent) : ShaShapeResWidget(parent){}
+   ShaNonSphereResWidget(QWidget *parent) : ShaShapeResultsWidget(parent){}
    virtual ~ShaNonSphereResWidget(){}
    ShaNonSphereResWidget(const ShaNonSphereResWidget& src) = delete;
    ShaNonSphereResWidget& operator= (ShaNonSphereResWidget& src) = delete;
@@ -148,4 +148,4 @@ protected:
    QLineEdit *axBetaCoreBox;
    QLineEdit *axBetaTotBox;
 };
-#endif // SHASHAPERESWIDGETS_H
+#endif // SHASHAPERESULTSWIDGETS_H

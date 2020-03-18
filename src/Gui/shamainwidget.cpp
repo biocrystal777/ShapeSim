@@ -148,20 +148,23 @@ void ShaMainWidget::saveParameters() const
    QSettings settings("AgCoelfen", "ShapeSim");
    settings.setIniCodec("UTF-8");
 
-   settings.setValue(tr("shapeParameters/prolate/axisAlphaMin"), static_cast<double>(prolateWidgetPtr->getAxAlphaMin()));
-   settings.setValue(tr("shapeParameters/prolate/axisAlphaMax"), static_cast<double>(prolateWidgetPtr->getAxAlphaMax()));
-   settings.setValue(tr("shapeParameters/prolate/axisBetaMin"), static_cast<double>(prolateWidgetPtr->getAxBetaMin()));
-   settings.setValue(tr("shapeParameters/prolate/axisBetaMax"), static_cast<double>(prolateWidgetPtr->getAxBetaMax()));
+   GridParameters pars = prolateWidgetPtr->getGridParameters();
+   settings.setValue(tr("shapeParameters/prolate/axisAlphaMin"), static_cast<double>(pars.alphaMin));
+   settings.setValue(tr("shapeParameters/prolate/axisAlphaMax"), static_cast<double>(pars.alphaMax));
+   settings.setValue(tr("shapeParameters/prolate/axisBetaMin"),  static_cast<double>(pars.betaMin));
+   settings.setValue(tr("shapeParameters/prolate/axisBetaMax"),  static_cast<double>(pars.betaMin));
 
-   settings.setValue(tr("shapeParameters/oblate/axisAlphaMin"), static_cast<double>(oblateWidgetPtr->getAxAlphaMin()));
-   settings.setValue(tr("shapeParameters/oblate/axisAlphaMax"),static_cast<double>( oblateWidgetPtr->getAxAlphaMax()));
-   settings.setValue(tr("shapeParameters/oblate/axisBetaMin"), static_cast<double>(oblateWidgetPtr->getAxBetaMin()));
-   settings.setValue(tr("shapeParameters/oblate/axisBetaMax"), static_cast<double>(oblateWidgetPtr->getAxBetaMax()));
+   pars = oblateWidgetPtr->getGridParameters();
+   settings.setValue(tr("shapeParameters/oblate/axisAlphaMin"),  static_cast<double>(pars.alphaMin));
+   settings.setValue(tr("shapeParameters/oblate/axisAlphaMax"),  static_cast<double>(pars.alphaMax));
+   settings.setValue(tr("shapeParameters/oblate/axisBetaMin"),   static_cast<double>(pars.betaMin));
+   settings.setValue(tr("shapeParameters/oblate/axisBetaMax"),   static_cast<double>(pars.betaMax));
 
-   settings.setValue(tr("shapeParameters/longRod/axisAlphaMin"), static_cast<double>(longRodWidgetPtr->getAxAlphaMin()));
-   settings.setValue(tr("shapeParameters/longRod/axisAlphaMax"), static_cast<double>(longRodWidgetPtr->getAxAlphaMax()));
-   settings.setValue(tr("shapeParameters/longRod/axisBetaMin"), static_cast<double>(longRodWidgetPtr->getAxBetaMin()));
-   settings.setValue(tr("shapeParameters/longRod/axisBetaMax"), static_cast<double>(longRodWidgetPtr->getAxBetaMax()));
+   pars = longRodWidgetPtr->getGridParameters();
+   settings.setValue(tr("shapeParameters/longRod/axisAlphaMin"), static_cast<double>(pars.alphaMin));
+   settings.setValue(tr("shapeParameters/longRod/axisAlphaMax"), static_cast<double>(pars.alphaMax));
+   settings.setValue(tr("shapeParameters/longRod/axisBetaMin"),  static_cast<double>(pars.betaMin));
+   settings.setValue(tr("shapeParameters/longRod/axisBetaMax"),  static_cast<double>(pars.betaMax));
 
    settings.setValue(tr("shapeParameters/strideIndex"), strideBox->currentIndex());
    settings.setValue(tr("outPutParameters/outPutDir"), outPutDir->text());
@@ -171,12 +174,11 @@ void ShaMainWidget::saveParameters() const
 
    void ShaMainWidget::loadParameters()
 {
-   bool ok(false);
-   ldouble initdouble(0.0);
-   int initInt(0);
-   QSettings settings("AgCoelfen", "ShapeSim");
-   settings.setIniCodec("UTF-8");
 
+ //  ldouble initdouble(0.0);
+
+
+/*
    // Macro for loading a ldouble parameter and initializing a class member box Widget
 #ifndef INIT_PARAMETER_LDOUBLE
 #define INIT_PARAMETER_LDOUBLE(keyName, widgetPtr, defaultValue){ \
@@ -201,9 +203,13 @@ void ShaMainWidget::saveParameters() const
    varSetFunc(initdouble); \
 };
 #endif // INIT_PARAMETER_VARSETFUNC_LDOUBLE
-
+*/
    // Alternative Macro for loading parameters of type int and
    // using the identifier of a setting function fo the initialization
+      QSettings settings("AgCoelfen", "ShapeSim");
+      settings.setIniCodec("UTF-8");
+      bool ok(false);
+      int initInt(0);
 #ifndef INIT_PARAMETER_VARSETFUNC_INT
 #define INIT_PARAMETER_VARSETFUNC_INT(keyName, varSetFunc, defaultValue){ \
    initInt = settings.value(tr(keyName), defaultValue).toDouble(&ok); \
@@ -216,7 +222,7 @@ void ShaMainWidget::saveParameters() const
 
 #endif //INIT_PARAMETER_VARSETFUNC
 
-
+/*
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisAlphaMin", prolateWidgetPtr->setAxAlphaMin, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisAlphaMax", prolateWidgetPtr->setAxAlphaMax, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/prolate/axisBetaMin", prolateWidgetPtr->setAxBetaMin, "1.0");
@@ -229,6 +235,7 @@ void ShaMainWidget::saveParameters() const
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/longRod/axisAlphaMax", longRodWidgetPtr->setAxAlphaMax, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/longRod/axisBetaMin", longRodWidgetPtr->setAxBetaMin, "1.0");
    INIT_PARAMETER_VARSETFUNC_LDOUBLE("shapeParameters/longRod/axisBetaMax", longRodWidgetPtr->setAxBetaMax, "1.0");
+   */
    INIT_PARAMETER_VARSETFUNC_INT("shapeParameters/strideIndex", strideBox->setCurrentIndex, 0);
    outPutDir->setText(settings.value("outPutParameters/outPutDir", "").toString());
 
@@ -410,11 +417,13 @@ void ShaMainWidget::singleCalculation()
 
       ShaProlateCalculator prolateCalculator(
                outPutDir->text(),
+               prolateWidgetPtr->getGridParameters(),
+               /*
                strideBox->currentText().toDouble(),
                prolateWidgetPtr->getAxAlphaMin(),
                prolateWidgetPtr->getAxAlphaMax(),
                prolateWidgetPtr->getAxBetaMin(),
-               prolateWidgetPtr->getAxBetaMax(),
+               prolateWidgetPtr->getAxBetaMax(),*/
                parFrame->getPhysicalParameters(),
                parFrame->getMeasurementParameters(),
                gnuPlotFrame->useGnuplot(),
@@ -439,11 +448,13 @@ void ShaMainWidget::singleCalculation()
 
       ShaLongRodCalculator longRodCalculator(
                outPutDir->text(),
+               longRodWidgetPtr->getGridParameters(),
+               /*
                strideBox->currentText().toDouble(),
                prolateWidgetPtr->getAxAlphaMin(),
                prolateWidgetPtr->getAxAlphaMax(),
                prolateWidgetPtr->getAxBetaMin(),
-               prolateWidgetPtr->getAxBetaMax(),               
+               prolateWidgetPtr->getAxBetaMax(),               */
                parFrame->getPhysicalParameters(),
                parFrame->getMeasurementParameters(),
                gnuPlotFrame->useGnuplot(),
@@ -524,11 +535,13 @@ void ShaMainWidget::distrCalculation()
                      outPutDir->text()
                      .append(tr("D_%1").arg(QString::number(static_cast<double>(distD[i]), 'e', 5)))
                      .append(tr("s_%1").arg(QString::number(static_cast<double>(distS[i]), 'e', 5))),
-                     strideBox->currentText().toDouble(),
+                     //strideBox->currentText().toDouble(),
+                     prolateWidgetPtr->getGridParameters(),
+                     /*
                      prolateWidgetPtr->getAxAlphaMin(),
                      prolateWidgetPtr->getAxAlphaMax(),
                      prolateWidgetPtr->getAxBetaMin(),
-                     prolateWidgetPtr->getAxBetaMax(),
+                     prolateWidgetPtr->getAxBetaMax(),*/
                      //surfLayerThicknessBox->value(),
                      parFrame->getPhysicalParameters(),
                      measPars,
@@ -567,11 +580,13 @@ void ShaMainWidget::distrCalculation()
                      outPutDir->text()
                      .append(tr("D_%1").arg(QString::number(static_cast<double>(distD[i]), 'e', 5)))
                      .append(tr("s_%1").arg(QString::number(static_cast<double>(distS[i]), 'e', 5))),
+                     longRodWidgetPtr->getGridParameters(),
+                     /*
                      strideBox->currentText().toDouble(),
                      longRodWidgetPtr->getAxAlphaMin(),
                      longRodWidgetPtr->getAxAlphaMax(),
                      longRodWidgetPtr->getAxBetaMin(),
-                     longRodWidgetPtr->getAxBetaMax(),
+                     longRodWidgetPtr->getAxBetaMax(),*/
                      parFrame->getPhysicalParameters(),
                      measPars,
                      gnuPlotFrame->useGnuplot(),

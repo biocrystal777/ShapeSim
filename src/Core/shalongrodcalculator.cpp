@@ -1,21 +1,13 @@
 #include "./shalongrodcalculator.h"
 
 ShaLongRodCalculator::ShaLongRodCalculator(const QString &outPutDirPath,
-                                           const ldouble stride,
-                                           const ldouble axAlphaMin,
-                                           const ldouble axAlphaMax,
-                                           const ldouble axBetaMin,
-                                           const ldouble axBetaMax,
+                                           const GridParameters gridpars,
                                            const PhysicalParameters physPars,
                                            const MeasurementParamaters measPars,
                                            const bool useGnuplot,
                                            const QString &gnuplotPath) :
    ShaRodLikesCalculator(outPutDirPath,
-                         stride,
-                         axAlphaMin,
-                         axAlphaMax,
-                         axBetaMin,
-                         axBetaMax,                         
+                         gridpars,
                          physPars,
                          measPars,
                          useGnuplot,

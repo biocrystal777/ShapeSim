@@ -1,4 +1,4 @@
-#include "shashapereswidgets.h"
+#include "shashaperesultswidgets.h"
 /*
 ShaSphereResWidget::ShaSphereResWidget(QWidget *parent) : ShaShapeResWidget(parent)
 {

@@ -59,7 +59,7 @@ SOURCES += ./src/Core/main.cpp\
            ./src/Gui/shamainwidget.cpp\
            ./src/Gui/shatwoboxwidget.cpp \
            ./src/Gui/shashapeparwidgets.cpp \
-           ./src/Gui/shashapereswidgets.cpp \
+           ./src/Gui/shashaperesultswidgets.cpp \
            ./src/Gui/shaparframe.cpp \
 
 HEADERS += ./src/Core/shacsvparser.h \
@@ -74,7 +74,7 @@ HEADERS += ./src/Core/shacsvparser.h \
            ./src/Gui/shamainwidget.h \
            ./src/Gui/shatwoboxwidget.h \
            ./src/Gui/shashapeparwidgets.h \
-           ./src/Gui/shashapereswidgets.h \           
+           ./src/Gui/shashaperesultswidgets.h \
            ./src/Gui/shaparframe.h \
            ./src/Gui/shalog_omp.h \           
            ./src/Gui/shagnuplotframe.h \

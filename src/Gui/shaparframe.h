@@ -14,6 +14,7 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QComboBox>
 
 class ShaSingleSDPairWidget final : public QWidget {
    Q_OBJECT
@@ -24,7 +25,6 @@ public:
    ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget& src) = delete;
    ShaSingleSDPairWidget(ShaSingleSDPairWidget&& src) = delete;
    ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget&& src) = delete;   
-
 
    MeasurementParamaters getMeasurementParameters() const {
       return MeasurementParamaters {
@@ -187,7 +187,7 @@ private:
    QDoubleSpinBox *temperatureBox   = nullptr;
    QDoubleSpinBox* surfLayerThicknessBox = nullptr;
    QDoubleSpinBox* solvLayerThicknessBox = nullptr;
-
+   QComboBox      *strideBox        = nullptr;
 
    QGroupBox *singDistSwitchBox              = nullptr;
    QHBoxLayout *singDistLay                  = nullptr;

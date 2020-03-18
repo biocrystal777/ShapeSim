@@ -39,7 +39,7 @@
 #include "./shaparframe.h"
 #include "./shacsvparser.h"
 #include "./shashapeparwidgets.h"
-#include "./shashapereswidgets.h"
+#include "./shashaperesultswidgets.h"
 #include "./shagnuplotframe.h"
 
 #include "./shalog_omp.h"
@@ -107,7 +107,7 @@ private:
    QLineEdit *outChiSqBox                = nullptr;
    QLineEdit *outPutDir                  = nullptr;
 
-   ShaShapeResWidget *shapeResWidget         = nullptr;
+   ShaShapeResultsWidget *shapeResWidget         = nullptr;
    //ShaSphereResWidget *sphereResWidgetPtr    = nullptr;
    ShaProlateResWidget *prolateResWidgetPtr  = nullptr;
    ShaOblateResWidget *oblateResWidgetPtr    = nullptr;

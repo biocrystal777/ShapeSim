@@ -4,11 +4,11 @@
 #include "./shadefinitions.h"
 
 struct GridParameters {
-   double alphaMin;
-   double alphaMax;
-   double betaMin;
-   double betaMax;
-   double stride;
+   ldouble alphaMin;
+   ldouble alphaMax;
+   ldouble betaMin;
+   ldouble betaMax;
+   ldouble gridResolution;
 };
 
 struct PhysicalParameters {

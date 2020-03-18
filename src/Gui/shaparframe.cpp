@@ -240,6 +240,8 @@ ShaSingleSDPairWidget::ShaSingleSDPairWidget(QWidget *parent, Qt::WindowFlags f)
    QObject::connect(useLamDevBox, SIGNAL(toggled(bool)), this, SLOT(toggleDevLam(bool)));
    lay->addWidget(useLamDevBox, 3, 11, 1, 3);
 
+
+
    loadParameters();
 }
 
