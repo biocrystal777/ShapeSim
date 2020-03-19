@@ -1,6 +1,5 @@
 #include "shagnuplotframe.h"
 
-
 ShaGnuplotFrame::ShaGnuplotFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f){
 
    this->setFrameStyle(0x1011);

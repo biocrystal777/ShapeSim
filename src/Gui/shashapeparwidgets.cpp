@@ -91,7 +91,6 @@ void ShaShapeParWidget::writeSettings()
 
 ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
-
 }
 
 void ShaShapeParWidget::ensureAlphaMaxDistance( double alphaMin )
@@ -125,73 +124,9 @@ void ShaShapeParWidget::ensureBetaMinDistance( double betaMax)
 ShaOblateParWidget::ShaOblateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
 
-  // QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
-   //QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
-   //QObject::connect(axBetaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMinDistance(double)));
-   //QObject::connect(axBetaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMaxDistance(double)));
-}
-/*
-void ShaOblateParWidget::ensureAlphaMaxDistance( double alphaMin)
-{
-   ldouble alphaMax = axAlphaMaxBox->value();
-   if(alphaMax <= alphaMin) axAlphaMaxBox->setValue(alphaMin + 0.5);
 }
 
-void ShaOblateParWidget::ensureAlphaMinDistance( double alphaMax)
-{
-   ldouble alphaMin = axAlphaMinBox->value();
-   ldouble betaMin = axBetaMinBox->value();
-   if(alphaMax <= alphaMin) axAlphaMinBox->setValue(alphaMax - 0.5);
-   if(alphaMax <= betaMin) axBetaMinBox->setValue(alphaMax - 0.5);
-}
-
-void ShaOblateParWidget::ensureBetaMaxDistance( double betaMin)
-{
-   ldouble betaMax = axBetaMaxBox->value();
-   ldouble alphaMax = axAlphaMaxBox->value();
-   if(betaMax <= betaMin) axBetaMaxBox->setValue(betaMin + 0.5);
-   if(alphaMax <= betaMin) axAlphaMaxBox->setValue(betaMin + 0.5);
-}
-
-void ShaOblateParWidget::ensureBetaMinDistance( double betaMax)
-{
-   ldouble betaMin = axBetaMinBox->value();
-   if(betaMax <= betaMin) axBetaMinBox->setValue(betaMax - 0.5);
-}
-*/
 ShaLongRodParWidget::ShaLongRodParWidget(QWidget *parent) : ShaShapeParWidget(parent)
 {
-//   QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
-//   QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
-//   QObject::connect(axBetaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMinDistance(double)));
-//   QObject::connect(axBetaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMaxDistance(double)));
-}
-/*
-void ShaLongRodParWidget::ensureAlphaMaxDistance( double alphaMin)
-{
-   ldouble alphaMax = axAlphaMaxBox->value();
-   if(alphaMax <= alphaMin) axAlphaMaxBox->setValue(alphaMin + 0.5);
-}
 
-void ShaLongRodParWidget::ensureAlphaMinDistance( double alphaMax)
-{
-   ldouble alphaMin = axAlphaMinBox->value();
-   ldouble betaMin = axBetaMinBox->value();
-   if(alphaMax <= alphaMin) axAlphaMinBox->setValue(alphaMax - 0.5);
-   if(alphaMax <= betaMin) axBetaMinBox->setValue(alphaMax - 0.5);
 }
-
-void ShaLongRodParWidget::ensureBetaMaxDistance( double betaMin)
-{
-   ldouble betaMax = axBetaMaxBox->value();
-   ldouble alphaMax = axAlphaMaxBox->value();
-   if(betaMax <= betaMin) axBetaMaxBox->setValue(betaMin + 0.5);
-   if(alphaMax <= betaMin) axAlphaMaxBox->setValue(betaMin + 0.5);
-}
-
-void ShaLongRodParWidget::ensureBetaMinDistance( double betaMax)
-{
-   ldouble betaMin = axBetaMinBox->value();
-   if(betaMax <= betaMin) axBetaMinBox->setValue(betaMax - 0.5);
-}
-*/

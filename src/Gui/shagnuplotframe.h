@@ -11,10 +11,8 @@
 #include <QSettings>
 #include <QFileDialog>
 
-
 class ShaGnuplotFrame final : public QFrame {
    Q_OBJECT
-
 public:
 
    ShaGnuplotFrame(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
@@ -36,12 +34,10 @@ private:
 
   void loadSettings();
 
-
 private slots:
 
   void writeSettings();
   void choosegnuplotPath();
-
 };
 
 #endif // SHAGNUPLOTFRAME_H

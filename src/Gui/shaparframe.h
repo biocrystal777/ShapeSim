@@ -161,21 +161,6 @@ public:
 
 
    inline MeasurementParamaters getMeasurementParameters() const { return singleSDPairWidget->getMeasurementParameters();}
-/*   inline ldouble getDiffCoeff()     const { return this->singleSDPairWidget->getDiffCoeff();        }
-   inline ldouble getSedCoeff()      const { return this->singleSDPairWidget->getSedCoeff();         }
-   inline ldouble getLSPRLambda()    const { return this->singleSDPairWidget->getLSPRLambda();       }
-   inline bool    useDiffCoeff()     const { return this->singleSDPairWidget->useDiffCoeff();        }
-   inline bool    useSedCoeff()      const { return this->singleSDPairWidget->useSedCoeff();         }
-   inline bool    useLSPRLambda()    const { return this->singleSDPairWidget->useSedCoeff();         }
-   inline ldouble getDiffCoeffDev()  const { return this->singleSDPairWidget->getDiffCoeffDev();     }
-   inline ldouble getSedCoeffDev()   const { return this->singleSDPairWidget->getSedCoeffDev();      }
-   inline ldouble getLSPRLambdaDev() const { return this->singleSDPairWidget->getSedCoeffDev();      }
-   inline bool    useDiffCoeffDev()  const { return this->singleSDPairWidget->useDiffCoeffDev();     }
-   inline bool    useSedCoeffDev()   const { return this->singleSDPairWidget->useSedCoeffDev();      }
-   inline bool    useLSPRLambaDev()  const { return this->singleSDPairWidget->useLSPRLambaDev();     }
-   inline bool    useTrackDensity()  const { return this->singleSDPairWidget->useTrackDensity();     }
-*/
-
    inline QString getDistrFile()     const { return this->distSDPairWidget->getDistrFilePath();      }
 
 private:

@@ -76,7 +76,7 @@ private:
    QFrame *shapeFrame               = nullptr;
    QGridLayout *shapeFrameLay       = nullptr;
 
-   QComboBox *strideBox                  = nullptr;
+//   QComboBox *strideBox                  = nullptr;
 
 
 
