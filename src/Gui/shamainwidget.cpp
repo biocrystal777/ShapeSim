@@ -119,13 +119,11 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    logWidget = new ShaLog(this);
    thisLay->addWidget(logWidget, 21, 0, 10,15);
 
-   this->loadParameters();
-qDebug() << 3;
+   loadParameters();
    QObject::connect(prolateSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToProlate(bool)));
    QObject::connect(oblateSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToOblate(bool)));
    QObject::connect(longRodSwitch, SIGNAL(toggled(bool)), this, SLOT(switchToLongRod(bool)));
    switchToProlate(true);
-   qDebug() << 4;
 }
 
 ShaMainWidget::~ShaMainWidget()
@@ -138,27 +136,7 @@ void ShaMainWidget::saveParameters() const
    QSettings settings("AgCoelfen", "ShapeSim");
    settings.setIniCodec("UTF-8");
 
-   GridParameters pars = prolateWidgetPtr->getGridParameters();
-   settings.setValue(tr("shapeParameters/prolate/axisAlphaMin"), static_cast<double>(pars.alphaMin));
-   settings.setValue(tr("shapeParameters/prolate/axisAlphaMax"), static_cast<double>(pars.alphaMax));
-   settings.setValue(tr("shapeParameters/prolate/axisBetaMin"),  static_cast<double>(pars.betaMin));
-   settings.setValue(tr("shapeParameters/prolate/axisBetaMax"),  static_cast<double>(pars.betaMin));
-
-   pars = oblateWidgetPtr->getGridParameters();
-   settings.setValue(tr("shapeParameters/oblate/axisAlphaMin"),  static_cast<double>(pars.alphaMin));
-   settings.setValue(tr("shapeParameters/oblate/axisAlphaMax"),  static_cast<double>(pars.alphaMax));
-   settings.setValue(tr("shapeParameters/oblate/axisBetaMin"),   static_cast<double>(pars.betaMin));
-   settings.setValue(tr("shapeParameters/oblate/axisBetaMax"),   static_cast<double>(pars.betaMax));
-
-   pars = longRodWidgetPtr->getGridParameters();
-   settings.setValue(tr("shapeParameters/longRod/axisAlphaMin"), static_cast<double>(pars.alphaMin));
-   settings.setValue(tr("shapeParameters/longRod/axisAlphaMax"), static_cast<double>(pars.alphaMax));
-   settings.setValue(tr("shapeParameters/longRod/axisBetaMin"),  static_cast<double>(pars.betaMin));
-   settings.setValue(tr("shapeParameters/longRod/axisBetaMax"),  static_cast<double>(pars.betaMax));
-
-   //settings.setValue(tr("shapeParameters/strideIndex"), strideBox->currentIndex());
    settings.setValue(tr("outPutParameters/outPutDir"), outPutDir->text());
-
    parFrame->saveParameters();
 }
 
