@@ -8,19 +8,19 @@ ShaShapeParWidget::ShaShapeParWidget(const QString &shapeID, QWidget *parent ) :
    QLabel *label = new QLabel(tr("<b>Grid parameters:</b>"), this);
    shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
 
-   auto makeLabeledSpinBox = [this](const QString &labelText, QDoubleSpinBox *spinBox, int posX, int posY, double minVal, double maxVal){
+   auto makeLabeledSpinBox = [this](const QString &labelText, QDoubleSpinBox **spinBox, int posY, int posX, double minVal, double maxVal){
       QLabel *label = new QLabel(labelText, this);
       const int dist = 3;
       shapeLay->addWidget(label, posY, posX, 1, dist);
-      spinBox = new QDoubleSpinBox(this);
-      shapeLay->addWidget(axAlphaMinBox, posY, posX+dist, 1, 3);
-      spinBox->setMinimum(minVal);
-      spinBox->setMaximum(maxVal);
+      *spinBox = new QDoubleSpinBox(this);
+      shapeLay->addWidget(*spinBox, posY, posX+dist, 1, 3);
+      (*spinBox)->setMinimum(minVal);
+      (*spinBox)->setMaximum(maxVal);
    };
-   makeLabeledSpinBox(tr("coreAxisAlpha<sub>min</sub> / nm:"), axAlphaMinBox, 1, 0, 0.0, 999.5);
-   makeLabeledSpinBox(tr("coreAxisAlpha<sub>max</sub> / nm:"), axAlphaMaxBox, 1, 6, 5.0, 1000.0);
-   makeLabeledSpinBox(tr("coreAxisAlpha<sub>min</sub> / nm:"), axBetaMinBox,  2, 0, 0.0, 999.5);
-   makeLabeledSpinBox(tr("coreAxisBeta<sub>max</sub> / nm:"),  axBetaMaxBox,  2, 6, 1.0, 1000.0);
+   makeLabeledSpinBox(tr("coreAxisAlpha<sub>min</sub> / nm:"), &axAlphaMinBox, 1, 0, 0.0, 999.5);
+   makeLabeledSpinBox(tr("coreAxisAlpha<sub>max</sub> / nm:"), &axAlphaMaxBox, 1, 6, 5.0, 1000.0);
+   makeLabeledSpinBox(tr("coreAxisAlpha<sub>min</sub> / nm:"), &axBetaMinBox,  2, 0, 0.0, 999.5);
+   makeLabeledSpinBox(tr("coreAxisBeta<sub>max</sub> / nm:"),  &axBetaMaxBox,  2, 6, 1.0, 1000.0);
 
    label = new QLabel("Grid resolution / nm:", this);
    shapeLay->addWidget(label, 3, 0, 1, 4);

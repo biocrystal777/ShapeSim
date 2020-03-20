@@ -11,6 +11,7 @@ using std::string;
 ShaMainWidget::ShaMainWidget(QWidget *parent)
    : QWidget(parent)
 {
+   qDebug() << 1;
 
    thisLay = new QGridLayout(this);
 
@@ -47,7 +48,9 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    //reWidgetPtr = new ShaSphereParWidget(shapeFrame);
    //shapeWidget = sphereWidgetPtr;
    //shapeFrameLay->addWidget(sphereWidgetPtr, 4, 0, 4, 12);
+   qDebug() << 4;
    prolateWidgetPtr = new ShaShapeParWidget(tr("Prolate"), shapeFrame);
+   qDebug() << 5;
    shapeFrameLay->addWidget(prolateWidgetPtr, 4, 0, 4, 12);
    prolateWidgetPtr->hide();
    curShapeWidget = prolateWidgetPtr;
@@ -60,7 +63,7 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
 
    gnuPlotFrame = new ShaGnuplotFrame(this);
    thisLay->addWidget(gnuPlotFrame, 11, 0, 1, 10);
-
+   qDebug() << 2;
 
    startButton = new QPushButton(tr("Calculate"), this);
    QObject::connect(startButton, SIGNAL(clicked()), this, SLOT(startCalculation()));
@@ -101,7 +104,7 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    outPBox = new QLineEdit(outputFrame);
    outPBox->setReadOnly(true);
    outputLay->addWidget(outPBox, 1, 13, 1, 3, Qt::AlignLeft);
-
+   qDebug() << 3;
    label = new QLabel(outputFrame);
    label->setText(tr("f/f<sub>0</sub> :"));
    outputLay->addWidget(label, 2, 10, 1, 3, Qt::AlignLeft);
