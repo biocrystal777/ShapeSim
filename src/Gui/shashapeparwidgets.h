@@ -14,18 +14,6 @@
 #include <QComboBox>
 #include <functional>
 
-/*
-class ShaGridDataWidget : public QWidget {
-   Q_OBJECT
-public:
-   ShaShapeParWidget(QWidget *parent = nullptr);
-
-
-private:
-   NO_COPY_ASSIGNMENT_CTORS(ShaShapeParWidget)
-}
-*/
-
 class ShaShapeParWidget : public QWidget {
    Q_OBJECT
 public:
@@ -37,74 +25,39 @@ public:
          .alphaMax = axAlphaMaxBox->value(),
          .betaMin = axAlphaMinBox->value(),
          .betaMax = axBetaMaxBox->value(),
-         .gridResolution = strideBox->currentText().toDouble()
+         .gridResolution = gridResBox->currentText().toDouble()
       };
    }
 
 protected:
 
-   inline ldouble getAxAlphaMin() const {return axAlphaMinBox->value();}
    inline void setAxAlphaMin(const ldouble val) {axAlphaMinBox->setValue(val);}
-   inline ldouble getAxAlphaMax() const {return axAlphaMaxBox->value();}
    inline void setAxAlphaMax(const ldouble val) {axAlphaMaxBox->setValue(val);}
-   inline ldouble getAxBetaMin() const {return axBetaMinBox->value();}
-   inline void setAxBetaMin(const ldouble val) {axBetaMinBox->setValue(val);}
-   inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
-   inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
+   inline void setAxBetaMin(const ldouble val)  {axBetaMinBox->setValue(val);}
+   inline void setAxBetaMax(const ldouble val)  {axBetaMaxBox->setValue(val);}
 
    ~ShaShapeParWidget(){ writeSettings(); }
 
-   QGridLayout    *shapeLay;
-   QDoubleSpinBox *axAlphaMinBox;
-   QDoubleSpinBox *axAlphaMaxBox;
-   QDoubleSpinBox *axBetaMinBox;
-   QDoubleSpinBox *axBetaMaxBox;
-   QComboBox *strideBox;
+   QGridLayout    *shapeLay      = nullptr;
+   QDoubleSpinBox *axAlphaMinBox = nullptr;
+   QDoubleSpinBox *axAlphaMaxBox = nullptr;
+   QDoubleSpinBox *axBetaMinBox  = nullptr;
+   QDoubleSpinBox *axBetaMaxBox  = nullptr;
+   QComboBox      *gridResBox    = nullptr;
 
    const QString shapeID;
 
 protected slots:
-   void ensureAlphaMinDistance( double AlphaMax);
-   void ensureAlphaMaxDistance( double AlphMin);
-   void ensureBetaMinDistance( double BetaMax);
-   void ensureBetaMaxDistance( double BetaMin);
+   void ensureAlphaMinDistance(double AlphaMax);
+   void ensureAlphaMaxDistance(double AlphMin);
+   void ensureBetaMinDistance(double BetaMax);
+   void ensureBetaMaxDistance(double BetaMin);
 
 private:
-
    void loadSettings();
    void writeSettings();
 
    NO_COPY_ASSIGNMENT_CTORS(ShaShapeParWidget)
 };
-/*
-class ShaProlateParWidget : public ShaShapeParWidget {
-   Q_OBJECT
-public:
-   ShaProlateParWidget(const QString &shapeID, QWidget *parent = 0);
-   ~ShaProlateParWidget(){}
 
-private:
-   NO_COPY_ASSIGNMENT_CTORS(ShaProlateParWidget)
-};
-
-class ShaOblateParWidget : public ShaShapeParWidget {
-   Q_OBJECT
-public:
-   ShaOblateParWidget(const QString &shapeID, QWidget *parent = 0);
-   ~ShaOblateParWidget(){}
-
-private:
-   NO_COPY_ASSIGNMENT_CTORS(ShaOblateParWidget)
-};
-
-class ShaLongRodParWidget : public ShaShapeParWidget {
-   Q_OBJECT
-public:
-   ShaLongRodParWidget(const QString &shapeID, QWidget *parent = 0);
-   ~ShaLongRodParWidget(){}
-
-private:
-   NO_COPY_ASSIGNMENT_CTORS(ShaLongRodParWidget)
-};
-*/
 #endif // SHASHAPEPARWIDGETS_H

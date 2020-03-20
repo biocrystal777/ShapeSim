@@ -11,7 +11,7 @@ using std::string;
 ShaMainWidget::ShaMainWidget(QWidget *parent)
    : QWidget(parent)
 {
-   qDebug() << 1;
+
    thisLay = new QGridLayout(this);
 
    parFrame = new ShaParFrame(this);
@@ -162,13 +162,13 @@ void ShaMainWidget::startCalculation()
 void ShaMainWidget::switchToProlate(bool chosen)
 {
    if(chosen){
-      qDebug() << 11 <<  curShapeWidget;
+
 
       curShapeWidget->hide();
-      qDebug() << 12;
+
       curShapeWidget = prolateWidgetPtr;
       curShapeWidget->show();
-      qDebug() << 12;
+
       shapeResWidget->hide();
       shapeResWidget = prolateResWidgetPtr;
       shapeResWidget->show();
