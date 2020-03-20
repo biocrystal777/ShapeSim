@@ -2,7 +2,7 @@
 
 using std::function;
 
-ShaShapeParWidget::ShaShapeParWidget( QWidget *parent ) : QWidget(parent){
+ShaShapeParWidget::ShaShapeParWidget(const QString &shapeID, QWidget *parent ) : QWidget(parent), shapeID(shapeID){
    shapeLay = new QGridLayout(this);
    QLabel *label = new QLabel(tr("<b>Limits:</b>"), this);
    shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
@@ -51,7 +51,9 @@ ShaShapeParWidget::ShaShapeParWidget( QWidget *parent ) : QWidget(parent){
 
    shapeLay->addWidget(strideBox, 3, 4, 1, 2);
 
-   QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
+   loadSettings();
+
+   QObject::connect(axAlphaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMinDistance(double)));
    QObject::connect(axAlphaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureAlphaMaxDistance(double)));
    QObject::connect(axBetaMaxBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMinDistance(double)));
    QObject::connect(axBetaMinBox, SIGNAL(valueChanged(double)), this, SLOT(ensureBetaMaxDistance(double)));
@@ -72,10 +74,11 @@ void ShaShapeParWidget::loadSettings()
       setter(init);
    };
 
-   loadValue(tr("shapeParameters/%1/axisAlphaMin").arg(shapeId), "0.0", [this](double d){setAxAlphaMin(d);} );
-   loadValue(tr("shapeParameters/%1/axisAlphaMax").arg(shapeId), "0.0", [this](double d){setAxAlphaMax(d);} );
-   loadValue(tr("shapeParameters/%1/axisBetaMin").arg(shapeId), "0.0", [this](double d){setAxBetaMin(d);  } );
-   loadValue(tr("shapeParameters/%1/axisBetaMax").arg(shapeId), "0.0", [this](double d){setAxBetaMax(d);  } );
+   loadValue(tr("shapeParameters/%1/axisAlphaMin").arg(shapeID), "0.0", [this](double d){setAxAlphaMin(d);} );
+   loadValue(tr("shapeParameters/%1/axisAlphaMax").arg(shapeID), "0.0", [this](double d){setAxAlphaMax(d);} );
+   loadValue(tr("shapeParameters/%1/axisBetaMin").arg(shapeID),  "0.0", [this](double d){setAxBetaMin(d);  } );
+   loadValue(tr("shapeParameters/%1/axisBetaMax").arg(shapeID),  "0.0", [this](double d){setAxBetaMax(d);  } );
+   strideBox->setCurrentIndex( settings.value(tr("shapeParameters/%1/gridRes").arg(shapeID), "0").toInt() );
 }
 
 void ShaShapeParWidget::writeSettings()
@@ -83,14 +86,11 @@ void ShaShapeParWidget::writeSettings()
    QSettings settings("AgCoelfen", "ShapeSim");
    settings.setIniCodec("UTF-8");
 
-   settings.setValue(tr("shapeParameters/%1/axisAlphaMin").arg(shapeId), axAlphaMinBox->value());
-   settings.setValue(tr("shapeParameters/%1/axisAlphaMax").arg(shapeId), axAlphaMaxBox->value());
-   settings.setValue(tr("shapeParameters/%1/axisBetaMin").arg(shapeId),  axBetaMinBox->value());
-   settings.setValue(tr("shapeParameters/%1/axisBetaMax").arg(shapeId),  axBetaMaxBox->value());
-}
-
-ShaProlateParWidget::ShaProlateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
-{
+   settings.setValue(tr("shapeParameters/%1/axisAlphaMin").arg(shapeID), axAlphaMinBox->value());
+   settings.setValue(tr("shapeParameters/%1/axisAlphaMax").arg(shapeID), axAlphaMaxBox->value());
+   settings.setValue(tr("shapeParameters/%1/axisBetaMin").arg(shapeID),  axBetaMinBox->value());
+   settings.setValue(tr("shapeParameters/%1/axisBetaMax").arg(shapeID),  axBetaMaxBox->value());
+   settings.setValue(tr("shapeParameters/%1/gridRes").arg(shapeID), strideBox->currentIndex());
 }
 
 void ShaShapeParWidget::ensureAlphaMaxDistance( double alphaMin )
@@ -119,14 +119,18 @@ void ShaShapeParWidget::ensureBetaMinDistance( double betaMax)
 {
    ldouble betaMin = axBetaMinBox->value();
    if(betaMax <= betaMin) axBetaMinBox->setValue(betaMax - 0.5);
-}
 
-ShaOblateParWidget::ShaOblateParWidget(QWidget *parent) : ShaShapeParWidget(parent)
+}
+/*
+ShaProlateParWidget::ShaProlateParWidget(const QString &shapeID, QWidget *parent) : ShaShapeParWidget(shapeID, parent)
 {
-
 }
 
-ShaLongRodParWidget::ShaLongRodParWidget(QWidget *parent) : ShaShapeParWidget(parent)
+ShaOblateParWidget::ShaOblateParWidget(const QString &shapeID, QWidget *parent) : ShaShapeParWidget(shapeID, parent)
 {
-
 }
+
+ShaLongRodParWidget::ShaLongRodParWidget(const QString &shapeID, QWidget *parent) : ShaShapeParWidget(shapeID, parent)
+{
+}
+*/

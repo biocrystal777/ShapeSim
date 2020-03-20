@@ -29,7 +29,7 @@ private:
 class ShaShapeParWidget : public QWidget {
    Q_OBJECT
 public:
-  ShaShapeParWidget(QWidget *parent = nullptr);
+  ShaShapeParWidget(const QString &shapeID, QWidget *parent = nullptr);
 
    inline GridParameters getGridParameters(){
       return GridParameters {
@@ -52,7 +52,7 @@ protected:
    inline ldouble getAxBetaMax() const {return axBetaMaxBox->value();}
    inline void setAxBetaMax(const ldouble val) {axBetaMaxBox->setValue(val);}
 
-   virtual ~ShaShapeParWidget(){}
+   ~ShaShapeParWidget(){ writeSettings(); }
 
    QGridLayout    *shapeLay;
    QDoubleSpinBox *axAlphaMinBox;
@@ -61,7 +61,7 @@ protected:
    QDoubleSpinBox *axBetaMaxBox;
    QComboBox *strideBox;
 
-   const QString shapeId;
+   const QString shapeID;
 
 protected slots:
    void ensureAlphaMinDistance( double AlphaMax);
@@ -76,11 +76,11 @@ private:
 
    NO_COPY_ASSIGNMENT_CTORS(ShaShapeParWidget)
 };
-
+/*
 class ShaProlateParWidget : public ShaShapeParWidget {
    Q_OBJECT
 public:
-   ShaProlateParWidget(QWidget *parent = 0);
+   ShaProlateParWidget(const QString &shapeID, QWidget *parent = 0);
    ~ShaProlateParWidget(){}
 
 private:
@@ -90,22 +90,21 @@ private:
 class ShaOblateParWidget : public ShaShapeParWidget {
    Q_OBJECT
 public:
-   ShaOblateParWidget(QWidget *parent = 0);
+   ShaOblateParWidget(const QString &shapeID, QWidget *parent = 0);
    ~ShaOblateParWidget(){}
 
 private:
-
    NO_COPY_ASSIGNMENT_CTORS(ShaOblateParWidget)
 };
 
 class ShaLongRodParWidget : public ShaShapeParWidget {
    Q_OBJECT
 public:
-   ShaLongRodParWidget(QWidget *parent = 0);
+   ShaLongRodParWidget(const QString &shapeID, QWidget *parent = 0);
    ~ShaLongRodParWidget(){}
 
 private:
    NO_COPY_ASSIGNMENT_CTORS(ShaLongRodParWidget)
 };
-
+*/
 #endif // SHASHAPEPARWIDGETS_H

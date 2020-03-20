@@ -436,7 +436,6 @@ QString ShaDistrSDPairWidget::getDistrFilePath(bool quoted) const {
     return path;
 }
 
-
 QString ShaDistrSDPairWidget::chopStringsQuotMarksToOne(QString & string) const
 {
    chopStringsQuotMarksEntirely(string);

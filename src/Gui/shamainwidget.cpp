@@ -47,35 +47,21 @@ ShaMainWidget::ShaMainWidget(QWidget *parent)
    //reWidgetPtr = new ShaSphereParWidget(shapeFrame);
    //shapeWidget = sphereWidgetPtr;
    //shapeFrameLay->addWidget(sphereWidgetPtr, 4, 0, 4, 12);
-   prolateWidgetPtr = new ShaProlateParWidget(shapeFrame);
+   prolateWidgetPtr = new ShaShapeParWidget(tr("Prolate"), shapeFrame);
    shapeFrameLay->addWidget(prolateWidgetPtr, 4, 0, 4, 12);
    prolateWidgetPtr->hide();
-   shapeWidget = prolateWidgetPtr;
-   oblateWidgetPtr = new ShaOblateParWidget(shapeFrame);
+   curShapeWidget = prolateWidgetPtr;
+   oblateWidgetPtr = new ShaShapeParWidget(tr("Oblate"), shapeFrame);
    shapeFrameLay->addWidget(oblateWidgetPtr, 4, 0, 4, 12);
    oblateWidgetPtr->hide();
-   longRodWidgetPtr = new ShaLongRodParWidget(shapeFrame);
+   longRodWidgetPtr = new ShaShapeParWidget(tr("LongRod"), shapeFrame);
    shapeFrameLay->addWidget(longRodWidgetPtr, 4, 0, 4, 12);
    longRodWidgetPtr->hide();
 
    gnuPlotFrame = new ShaGnuplotFrame(this);
    thisLay->addWidget(gnuPlotFrame, 11, 0, 1, 10);
 
-   /*
-   QLabel *label = new QLabel("Stride [nm]:", this);
-   thisLay->addWidget(label, 12, 9, 1, 2);
-   strideBox = new QComboBox(this);
-   strideBox->addItem("1.0");
-   strideBox->addItem("0.5");
-   strideBox->addItem("0.2");
-   strideBox->addItem("0.1");
-   strideBox->addItem("0.05");
-   strideBox->addItem("0.02");
 
-
-   thisLay->addWidget(strideBox, 12, 11, 1, 2);
-qDebug() << 2;
-*/
    startButton = new QPushButton(tr("Calculate"), this);
    QObject::connect(startButton, SIGNAL(clicked()), this, SLOT(startCalculation()));
    thisLay->addWidget(startButton, 12, 3, 1, 6);
@@ -176,50 +162,34 @@ void ShaMainWidget::saveParameters() const
    parFrame->saveParameters();
 }
 
-   void ShaMainWidget::loadParameters()
+void ShaMainWidget::loadParameters()
 {
-
-      QSettings settings("AgCoelfen", "ShapeSim");
-      settings.setIniCodec("UTF-8");
-
-      /*
-      bool ok;
-      int initInt = settings.value("shapeParameters/strideIndex", "0.0").toDouble(&ok);
-      if(!ok){
-         ShaLog::logWarning(tr("Could not read parameter %1 from iniFile. Value will be set to %2")
-                            .arg("shapeParameters/strideIndex").arg(0.0));
-      }
-      strideBox->setCurrentIndex(initInt);
-*/
+   QSettings settings("AgCoelfen", "ShapeSim");
+   settings.setIniCodec("UTF-8");
    outPutDir->setText(settings.value("outPutParameters/outPutDir", "").toString());
-
 }
 
 void ShaMainWidget::startCalculation()
 {
-
    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-
    if(parFrame->calcSinglePair())
       singleCalculation();
    else if(parFrame->calcPairDistr())
       distrCalculation();
    else ShaLog::logWarning(tr("No evaluation mode chosen."));
-
    QGuiApplication::restoreOverrideCursor();
-
 }
 
 
 void ShaMainWidget::switchToProlate(bool chosen)
 {
    if(chosen){
-      qDebug() << 11 <<  shapeWidget;
+      qDebug() << 11 <<  curShapeWidget;
 
-      shapeWidget->hide();
+      curShapeWidget->hide();
       qDebug() << 12;
-      shapeWidget = prolateWidgetPtr;
-      shapeWidget->show();
+      curShapeWidget = prolateWidgetPtr;
+      curShapeWidget->show();
       qDebug() << 12;
       shapeResWidget->hide();
       shapeResWidget = prolateResWidgetPtr;
@@ -232,9 +202,9 @@ void ShaMainWidget::switchToProlate(bool chosen)
 void ShaMainWidget::switchToOblate(bool chosen)
 {
    if(chosen){
-      shapeWidget->hide();
-      shapeWidget = oblateWidgetPtr;
-      shapeWidget->show();
+      curShapeWidget->hide();
+      curShapeWidget = oblateWidgetPtr;
+      curShapeWidget->show();
 
       shapeResWidget->hide();
       shapeResWidget = oblateResWidgetPtr;
@@ -246,9 +216,9 @@ void ShaMainWidget::switchToOblate(bool chosen)
 void ShaMainWidget::switchToLongRod(bool chosen)
 {
    if(chosen){
-      shapeWidget->hide();
-      shapeWidget = longRodWidgetPtr;
-      shapeWidget->show();
+      curShapeWidget->hide();
+      curShapeWidget = longRodWidgetPtr;
+      curShapeWidget->show();
 
       shapeResWidget->hide();
       shapeResWidget = longRodResWidgetPtr;
@@ -527,12 +497,10 @@ void ShaMainWidget::distrCalculation()
 
    // find minima for each distribution
 
-   //qDebug() << 5;
+
    vector<vector<doublePair>> minD = extractMinLines(chiSqD, axAlpha, axBeta);
    vector<vector<doublePair>> minS = extractMinLines(chiSqS, axAlpha, axBeta);
    vector<vector<doublePair>> minLam = extractMinLines(chiSqLam, axAlpha, axBeta);
-   //qDebug() << 6;
-
 
    for(uint i = 0; i < minD[0].size(); ++i){
       qDebug() << minD[0][i].alpha << minD[0][i].beta << minS[0][i].alpha << minS[0][i].beta;
