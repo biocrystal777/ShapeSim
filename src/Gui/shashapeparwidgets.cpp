@@ -8,12 +8,12 @@ ShaShapeParWidget::ShaShapeParWidget(const QString &shapeID, QWidget *parent ) :
    QLabel *label = new QLabel(tr("<b>Grid parameters:</b>"), this);
    shapeLay->addWidget(label, 0, 1, 1, 3, Qt::AlignCenter);
 
-   auto makeLabeledSpinBox = [this](const QString &labelText, QDoubleSpinBox **spinBox, int posY, int posX, double minVal, double maxVal){
+   auto makeLabeledSpinBox = [this](const QString &labelText, QDoubleSpinBox **spinBox, int row, int col, double minVal, double maxVal){
       QLabel *label = new QLabel(labelText, this);
       const int dist = 3;
-      shapeLay->addWidget(label, posY, posX, 1, dist);
+      shapeLay->addWidget(label, row, col, 1, dist);
       *spinBox = new QDoubleSpinBox(this);
-      shapeLay->addWidget(*spinBox, posY, posX+dist, 1, 3);
+      shapeLay->addWidget(*spinBox, row, col+dist, 1, 3);
       (*spinBox)->setMinimum(minVal);
       (*spinBox)->setMaximum(maxVal);
    };
