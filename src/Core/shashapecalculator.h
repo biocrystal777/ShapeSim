@@ -50,6 +50,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <shaparamstructs.h>
 #include "./shalog_omp.h"
 
 class ShaShapeCalculator : public QObject
@@ -62,16 +63,8 @@ public:
    ShaShapeCalculator(ShaShapeCalculator&& src) = delete;
    ShaShapeCalculator& operator= (ShaShapeCalculator&& src) = delete;
 
-   virtual int start(
-         QVector<ldouble> &axAlpha,
-         QVector<ldouble> &axBeta,
-         QVector<QVector<ldouble> >&chiSqD, // optima for D
-         QVector<QVector<ldouble> >&chiSqS, // optima for S
-         QVector<QVector<ldouble> >&chiSqLam
+   virtual SimulationResults doSimulation(int *errCode = nullptr
          ) = 0;
-
-
-
 
 protected:
    // constants

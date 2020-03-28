@@ -7,7 +7,7 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
                                            const bool useGnuplot,
                                            const QString &gnuplotPath) :
    outPutDirPath(outPutDirPath),
-   stride(gridPars.gridResolution),
+   gridRes(gridPars.gridResolution),
    axAlphaMin(gridPars.alphaMin),
    axAlphaMax(gridPars.alphaMax),
    axBetaMin(gridPars.betaMin),
@@ -36,20 +36,24 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
 {
 }
 
-int ShaTwoAxisCalculator::start(QVector<ldouble> &axAlpha,
-                                QVector<ldouble> &axBeta,
-                                QVector<QVector<ldouble> > &chiSqD,    // optima for D
-                                QVector<QVector<ldouble> > &chiSqS,    // optima for S
-                                QVector<QVector<ldouble> > &chiSqLam   // optima for lambda
-                                )
+SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
 {
+   SimulationResults results;
+   QVector<ldouble> &axAlpha = results.axAlpha;
+   QVector<ldouble> &axBeta = results.axBeta;
+   QVector<QVector<ldouble> > chiSqD = results.chiSqD;   // optima for D
+   QVector<QVector<ldouble> > &chiSqS = results.chiSqS;   // optima for S
+   QVector<QVector<ldouble> > &chiSqLam = results.chiSqLam;
+
+
+
    {
       QDir outPutDir;
       if(!(outPutDir.exists(outPutDirPath)))
          outPutDir.mkpath(outPutDirPath);
    }
-   createVectorFromTo(axAlpha, axAlphaMin, axAlphaMax, stride);
-   createVectorFromTo(axBeta, axBetaMin, axBetaMax, stride);
+   createVectorFromTo(axAlpha, axAlphaMin, axAlphaMax, gridRes);
+   createVectorFromTo(axBeta, axBetaMin, axBetaMax, gridRes);
 
    //-//////////////////////////////////
    // Get optimal beta(alpha) for D
@@ -73,10 +77,10 @@ int ShaTwoAxisCalculator::start(QVector<ldouble> &axAlpha,
       callGnuPlot(gnuplotPath, tr("%1/scriptD.gnpl").arg(outPutDirPath));
       }
 
-      extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqD, minDAlpha, minDBeta);
+      extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqD, minDAlpha, minDBeta);
       if(plotDDev){
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqDDevUpper, minDAlphaDevU, minDBetaDevU);
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqDDevLower, minDAlphaDevL, minDBetaDevL);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqDDevUpper, minDAlphaDevU, minDBetaDevU);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqDDevLower, minDAlphaDevL, minDBetaDevL);
       }
    }
    //-////////////////////////////////
@@ -100,10 +104,10 @@ int ShaTwoAxisCalculator::start(QVector<ldouble> &axAlpha,
       callGnuPlot("/usr/bin/gnuplot", tr("%1/scriptS.gnpl").arg(outPutDirPath));
       }
 
-      extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqS, minSAlpha, minSBeta);
+      extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqS, minSAlpha, minSBeta);
       if(plotSDev){
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqSDevUpper, minSAlphaDevU, minSBetaDevU);
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqSDevLower, minSAlphaDevL, minSBetaDevL);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqSDevUpper, minSAlphaDevU, minSBetaDevU);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqSDevLower, minSAlphaDevL, minSBetaDevL);
       }
    }
    //-/////////////////////////////////////
@@ -126,10 +130,10 @@ int ShaTwoAxisCalculator::start(QVector<ldouble> &axAlpha,
       callGnuPlot("/usr/bin/gnuplot", tr("%1/scriptLambda.gnpl").arg(outPutDirPath));
       }
 
-      extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqLam, minLamAlpha, minLamBeta);
+      extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqLam, minLamAlpha, minLamBeta);
       if(plotLamDev){
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqLamDevUpper, minLamAlphaDevU, minLamBetaDevU);
-         extractMinLine(axAlpha, axBeta, 2.0 * stride, chiSqLamDevLower, minLamAlphaDevL, minLamBetaDevL);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqLamDevUpper, minLamAlphaDevU, minLamBetaDevU);
+         extractMinLine(axAlpha, axBeta, 2.0 * gridRes, chiSqLamDevLower, minLamAlphaDevL, minLamBetaDevL);
       }
    }
    plotAlphaBetaOptima( outPutDirPath,
@@ -146,7 +150,7 @@ int ShaTwoAxisCalculator::start(QVector<ldouble> &axAlpha,
    // return parameters:
 
 
-   return 0;
+   return results;
 }
 
 
@@ -207,7 +211,9 @@ void ShaTwoAxisCalculator::calcChiSqS(const QVector<ldouble> &axAlpha,
    const ldouble SDevL = SMeas - SDev;
    for(int i = 0; i < aGridLength; ++i){
       for(int j = 0; j < bGridLength; ++j){
-         ldouble SCalc = calcS(axAlpha[i], axBeta[j], dShell, visc, densCore, densSurf, densSolv);
+         ldouble densAveragePart = calcAverageDens(axAlpha[i], axBeta[j], dShell,densCore, densSurf);
+         ldouble SCalc = calcS(axAlpha[i], axBeta[j], dShell, visc, densAveragePart, densSolv);
+
          chiSq[i][j] = calcChiSq(SCalc, SMeas, SMeas);
         // qDebug() << (double) axAlpha[i] << (double) axBeta[j] << (double) chiSq[i][j] << (double) SCalc << (double) SMeas << (double) dShell << (double) visc;
          if(calcDevs){
@@ -251,6 +257,7 @@ void ShaTwoAxisCalculator::calcChiSqLam(const QVector<ldouble> &axAlpha,
    }
 }
 
+
 ldouble ShaTwoAxisCalculator::calcD(const ldouble aCore, const ldouble bCore, const ldouble dShell, const ldouble visc, const ldouble T) const
 {
    ldouble rAlpha = aCore + dShell;                     // [nm]
@@ -268,12 +275,30 @@ ldouble ShaTwoAxisCalculator::calcD(const ldouble aCore, const ldouble bCore, co
    return DCalc;
 }
 
+ldouble ShaTwoAxisCalculator::calcAverageDens(const ldouble aCore,
+                                              const ldouble bCore,
+                                              const ldouble dShell,
+                                              const ldouble densCore,
+                                              const ldouble densSurf)
+{
+   ldouble rAlpha = aCore + dShell;                     // [nm]
+   ldouble rBeta = bCore + dShell;                       // [nm]
+   ldouble coreVol = calcVol(aCore, bCore);
+   ldouble totVol = calcVol(rAlpha, rBeta);
+   ldouble shellVol = coreVol - totVol;
+   ldouble volPartialCore = coreVol / totVol;
+   ldouble volPartialShell = shellVol / totVol;
+   //ldouble rhoPart = volPartialCore * densCore + volPartialShell * densSurf;
+   ldouble rhoPart = volPartialCore * densCore + volPartialShell * densSurf;
+   return rhoPart;
+}
+
+
 ldouble ShaTwoAxisCalculator::calcS(const ldouble aCore,
                                            const ldouble bCore,
                                            const ldouble dShell,
                                            const ldouble visc,
-                                           const ldouble densCore,
-                                           const ldouble densSurf,
+                                           const ldouble densAveragePart,
                                            const ldouble densSolv) const
 {
 
@@ -287,17 +312,11 @@ ldouble ShaTwoAxisCalculator::calcS(const ldouble aCore,
    ldouble ff0 = calcFF0(P);
    ldouble f0 =  6 * PI * visc * a0;
    ldouble fShape = ff0 * f0;
-   //if( i == aGridLength/2 && j ==  bGridLength/2 ) qDebug() << double(fShape);
-   // calc mass
-   ldouble coreVol = calcVol(aCore, bCore);
+
    ldouble totVol = calcVol(rAlpha, rBeta);
-   ldouble shellVol = coreVol - totVol;
-   ldouble volPartialCore = coreVol / totVol;
-   ldouble volPartialShell = shellVol / totVol;
-   ldouble rhoPart = volPartialCore * densCore + volPartialShell * densSurf;
-   ldouble mass = rhoPart * totVol;
+   ldouble mass = densAveragePart * totVol;
    // calc S and chiSqS
-   ldouble SCalc = mass * (1.0 - densSolv / rhoPart) / fShape;
+   ldouble SCalc = mass * (1.0 - densSolv / densAveragePart) / fShape;
    SCalc *= 1e1; // adapt to unit conversion
 
    return SCalc;

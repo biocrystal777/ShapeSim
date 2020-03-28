@@ -23,7 +23,6 @@ private:
    ldouble calcFF0(const ldouble P) const override;
    ldouble calcA0(const ldouble alpha, const ldouble beta) const override;
    ldouble calcVol(const ldouble alpha, const ldouble beta) const override;
-
 };
 
 #endif // SHAPROLATECALCULATOR_H

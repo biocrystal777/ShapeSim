@@ -9,45 +9,38 @@ ShaParFrame::ShaParFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f)
    this->setFrameStyle(0x1011);
    //this->setMinimumSize(620, 350);
    //this->setMaximumSize(620, 350);
-
    lay = new QGridLayout(this);
 
-   QLabel *label = new QLabel(this);
-   label->setText(tr("ρ<sub>core</sub> [g/ml]:"));
-   lay->addWidget(label, 0, 0, 1, 3, Qt::AlignLeft);
-   coreDensityBox = new QDoubleSpinBox(this);
-   coreDensityBox->setDecimals(4);
-   lay->addWidget(coreDensityBox, 0, 3, 1, 4);
+   auto makeLabeledSpinBox = [this](QDoubleSpinBox **spinBox, const QString &labelText, const QString& toolTipText, int row, int col, int precision, double minVal, double maxVal){
+      QLabel *label = new QLabel(labelText, this);
+      label->setToolTip(toolTipText);
+      const int distLabel = 3;
+      const int distBox = 4;
+      lay->addWidget(label, row, col, 1, distLabel);
+      *spinBox = new QDoubleSpinBox(this);
+      lay->addWidget(*spinBox, row, col+distLabel, 1, distBox);
+      (*spinBox)->setToolTip(toolTipText);
+      (*spinBox)->setDecimals(precision);
+      (*spinBox)->setMinimum(minVal);
+      (*spinBox)->setMaximum(maxVal);
+   };
 
-   label = new QLabel(this);
-   label->setText(tr("ρ<sub>surf</sub> [g/ml]:"));
-   lay->addWidget(label, 1, 0, 1, 3, Qt::AlignLeft);
-   surfDensityBox = new QDoubleSpinBox(this);
-   surfDensityBox->setDecimals(4);
-   lay->addWidget(surfDensityBox, 1, 3, 1, 4);
-
-   label = new QLabel(this);
-   label->setText(tr("ρ<sub>solv</sub> [g/ml]:"));
-   lay->addWidget(label, 2, 0, 1, 3, Qt::AlignLeft);
-   solvDensityBox = new QDoubleSpinBox(this);
-   solvDensityBox->setDecimals(4);
-   lay->addWidget(solvDensityBox, 2, 3, 1, 4);
-
-   label = new QLabel(this);
-   label->setText(tr("η<sub>solv</sub> [cP]:"));
-   lay->addWidget(label, 3, 0, 1, 3, Qt::AlignLeft);
-   viscSolvBox = new QDoubleSpinBox(this);
-   viscSolvBox->setDecimals(4);
-   lay->addWidget(viscSolvBox, 3, 3, 1, 4);
-
-   label = new QLabel(this);
-   label->setText(tr("T [K]:"));
-   lay->addWidget(label, 4, 0, 1, 3, Qt::AlignLeft);
-   temperatureBox = new QDoubleSpinBox(this);
-   temperatureBox->setMinimum(100.0);
-   temperatureBox->setMaximum(500.0);
-   lay->addWidget(temperatureBox, 4, 3, 1, 4);
-
+   makeLabeledSpinBox(&coreDensityBox,        tr("ρ<sub>core</sub> / (g/ml):"),
+                      tr("Density of particle core"),          0,  0,  4,   0.0, 100.0);
+   makeLabeledSpinBox(&surfDensityBox,        tr("ρ<sub>surf</sub> / (g/ml):"),
+                      tr("Density of particle shell"),         1,  0,  4,   0.0, 100.0);
+   makeLabeledSpinBox(&solvDensityBox,        tr("ρ<sub>solv</sub> / (g/ml):"),
+                      tr("Denstiy of solvent"),                2,  0,  4,   0.0, 100.0);
+   makeLabeledSpinBox(&temperatureBox,        tr("T / K:"),
+                      tr("Temperature"),                       3,  0,  4, 200.0, 400.0);
+   makeLabeledSpinBox(&viscSolvBox,          tr("η / cP:"),
+                      tr("Viscosity of solvent"),              4,  0,  4,   0.0, 400.0);
+   makeLabeledSpinBox(&surfLayerThicknessBox, tr("layer<sub>surf</sub> / nm:"),
+                      tr("Shell/Surfactanct layer thickness"), 1, 11, 4,    0.0, 100.0);
+   makeLabeledSpinBox(&solvLayerThicknessBox, tr("layer<sub>solv</sub> / nm:"),
+                      tr("Solvation shell thickness"),         2, 11, 4,    0.0,  10.0);
+   solvLayerThicknessBox->setEnabled(false);
+   /*
    label= new QLabel("layer<sub>surf</sub> [nm]:", this);
    lay->addWidget(label, 1, 8, 1, 3);
    surfLayerThicknessBox = new QDoubleSpinBox(this);
@@ -58,6 +51,7 @@ ShaParFrame::ShaParFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f)
    solvLayerThicknessBox = new QDoubleSpinBox(this);
    solvLayerThicknessBox->setEnabled(false);
    lay->addWidget(solvLayerThicknessBox, 2, 11, 1, 3);
+*/
 
    singDistSwitchBox = new QGroupBox(QString("Evaluation Mode"), this);
    lay->addWidget(singDistSwitchBox, 5, 0, 2, 10);
@@ -152,6 +146,18 @@ void ShaParFrame::switchToDist(bool chosen)
    }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 ShaSingleSDPairWidget::ShaSingleSDPairWidget(QWidget *parent, Qt::WindowFlags f) : QWidget(parent, f)
 {
    lay = new QGridLayout(this);
@@ -177,8 +183,6 @@ ShaSingleSDPairWidget::ShaSingleSDPairWidget(QWidget *parent, Qt::WindowFlags f)
    useDDevBox->setChecked(true);
    QObject::connect(useDDevBox, SIGNAL(toggled(bool)), this, SLOT(toggleDevD(bool)));
    lay->addWidget(useDDevBox, 0, 12, 1, 1);
-
-
 
    useSBox = new QCheckBox(this);
    useSBox->setChecked(true);

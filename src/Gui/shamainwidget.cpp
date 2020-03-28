@@ -306,13 +306,7 @@ vector<doublePair> ShaMainWidget::findCrossMinima(vector<vector<doublePair> > &d
 
 void ShaMainWidget::singleCalculation()
 {
-
    if(prolateSwitch->isChecked()) {
-      QVector<ldouble> axAlpha;
-      QVector<ldouble> axBeta;
-      QVector<QVector<ldouble> > chiSqD;
-      QVector<QVector<ldouble> > chiSqS;
-      QVector<QVector<ldouble> > chiSqLam;
 
       ShaProlateCalculator prolateCalculator(
                outPutDir->text(),
@@ -323,7 +317,7 @@ void ShaMainWidget::singleCalculation()
                gnuPlotFrame->gnuplotPath()
                );
 
-      prolateCalculator.start(axAlpha, axBeta, chiSqD, chiSqS, chiSqLam);
+      SimulationResults results = prolateCalculator.doSimulation();
 
       //outRhoBox->setText(QString::number(densParticle[minChiSqPos],'f', 2));
       //outChiSqBox->setText(QString::number(minChiSq,'f', 5));
@@ -333,11 +327,6 @@ void ShaMainWidget::singleCalculation()
 
    }
    else if(longRodSwitch->isChecked()){
-      QVector<ldouble> axAlpha;
-      QVector<ldouble> axBeta;
-      QVector<QVector<ldouble> > chiSqD;
-      QVector<QVector<ldouble> > chiSqS;
-      QVector<QVector<ldouble> > chiSqLam;
 
       ShaLongRodCalculator longRodCalculator(
                outPutDir->text(),
@@ -347,7 +336,7 @@ void ShaMainWidget::singleCalculation()
                gnuPlotFrame->useGnuplot(),
                gnuPlotFrame->gnuplotPath()
                );
-      longRodCalculator.start(axAlpha, axBeta, chiSqD, chiSqS, chiSqLam);
+      SimulationResults results = longRodCalculator.doSimulation();
    }
 }
 
@@ -380,7 +369,7 @@ void ShaMainWidget::distrCalculation()
       distD[i] = static_cast<ldouble>( data[0][i] );
       distS[i] = static_cast<ldouble>( data[1][i] );
    }
-
+/*
    // sD-Pair -> axisLength
    QVector<QVector<ldouble> > axAlpha;
    axAlpha.resize(distSize);
@@ -393,6 +382,9 @@ void ShaMainWidget::distrCalculation()
    chiSqS.resize(distSize);
    QVector<QVector<QVector<ldouble> > > chiSqLam;
    chiSqLam.resize(distSize);
+*/
+   QVector<SimulationResults> results;
+   results.resize(distSize);
 
    if(prolateSwitch->isChecked()){
 
@@ -430,7 +422,8 @@ void ShaMainWidget::distrCalculation()
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );
-            prolateCalculator.start(axAlpha[i], axBeta[i], chiSqD[i], chiSqS[i], chiSqLam[i]);
+            //prolateCalculator.doSimulation(axAlpha[i], axBeta[i], chiSqD[i], chiSqS[i], chiSqLam[i]);
+            results[i] = prolateCalculator.doSimulation();
          }
       }
    }
@@ -468,16 +461,27 @@ void ShaMainWidget::distrCalculation()
                      gnuPlotFrame->useGnuplot(),
                      gnuPlotFrame->gnuplotPath()
                      );
-            longRodCalculator.start(axAlpha[i], axBeta[i], chiSqD[i], chiSqS[i], chiSqLam[i]);
+            //longRodCalculator.doSimulation(axAlpha[i], axBeta[i], chiSqD[i], chiSqS[i], chiSqLam[i]);
+            results[i] = longRodCalculator.doSimulation();
          }
       }
    }
 
+   // Transitory merge old vector types vecto from results:
+   QVector<QVector<QVector<ldouble>>> chiSqD;
+   for(auto &r : results) chiSqD.append(r.chiSqD);
+   QVector<QVector<QVector<ldouble>>> chiSqS;
+   for(auto &r : results) chiSqS.append(r.chiSqS);
+   QVector<QVector<QVector<ldouble>>> chiSqLam;
+   for(auto &r : results) chiSqLam.append(r.chiSqLam);
+   QVector<QVector<ldouble> > axAlpha;
+   for(auto &r : results) axAlpha.append(r.axAlpha);
+   QVector<QVector<ldouble> > axBeta;
+   for(auto &r : results) axBeta.append(r.axBeta);
+
    // find minima for each distribution
-
-
-   vector<vector<doublePair>> minD = extractMinLines(chiSqD, axAlpha, axBeta);
-   vector<vector<doublePair>> minS = extractMinLines(chiSqS, axAlpha, axBeta);
+   vector<vector<doublePair>> minD = extractMinLines(chiSqD,     axAlpha, axBeta);
+   vector<vector<doublePair>> minS = extractMinLines(chiSqS,     axAlpha, axBeta);
    vector<vector<doublePair>> minLam = extractMinLines(chiSqLam, axAlpha, axBeta);
 
    for(uint i = 0; i < minD[0].size(); ++i){

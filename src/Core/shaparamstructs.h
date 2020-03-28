@@ -2,6 +2,7 @@
 #define SHAPARAMSTRUCTS_H
 
 #include "./shadefinitions.h"
+#include <QVector>
 
 struct GridParameters {
    ldouble alphaMin;
@@ -36,6 +37,15 @@ struct MeasurementParamaters {
    ldouble DDev;
    ldouble sDev;
    ldouble lamDev;
+};
+
+struct SimulationResults{
+   QVector<ldouble> axAlpha;
+   QVector<ldouble> axBeta;
+   QVector<QVector<ldouble> > chiSqD; // optima for D
+   QVector<QVector<ldouble> > chiSqS; // optima for s
+   QVector<QVector<ldouble> > avDensityPart;
+   QVector<QVector<ldouble> > chiSqLam;
 };
 
 #endif // SHAPARAMSTRUCTS_H

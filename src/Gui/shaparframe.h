@@ -24,7 +24,7 @@ public:
    ShaSingleSDPairWidget(const ShaSingleSDPairWidget& src) = delete;
    ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget& src) = delete;
    ShaSingleSDPairWidget(ShaSingleSDPairWidget&& src) = delete;
-   ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget&& src) = delete;   
+   ShaSingleSDPairWidget& operator= (ShaSingleSDPairWidget&& src) = delete;
 
    MeasurementParamaters getMeasurementParameters() const {
       return MeasurementParamaters {
@@ -49,7 +49,7 @@ public:
    inline ldouble getLSPRLambda()    const { return static_cast<ldouble>(waveLengthBox->value());    }
    inline bool    useDiffCoeff()     const { return useDBox->isChecked();                            }
    inline bool    useSedCoeff()      const { return useSBox->isChecked();                            }
-   inline bool    useLSPRLambda()    const { return useLamBox->isChecked();                          }   
+   inline bool    useLSPRLambda()    const { return useLamBox->isChecked();                          }
    inline ldouble getDiffCoeffDev()  const { return static_cast<ldouble>(diffCoeffDevBox->value());  }
    inline ldouble getSedCoeffDev()   const { return static_cast<ldouble>(sedCoeffDevBox->value());   }
    inline ldouble getLSPRLambdaDev() const { return static_cast<ldouble>(waveLengthDevBox->value()); }

@@ -24,12 +24,7 @@ public:
    ShaTwoAxisCalculator(ShaTwoAxisCalculator&& src) = delete;
    ShaTwoAxisCalculator& operator= (ShaTwoAxisCalculator&& src) = delete;
 
-   virtual int start(QVector<ldouble> &axAlpha,
-                     QVector<ldouble> &axBeta,
-                     QVector<QVector<ldouble> >&chiSqD, // optima for D
-                     QVector<QVector<ldouble> >&chiSqS, // optima for S
-                     QVector<QVector<ldouble> >&chiSqLam
-                     );
+   virtual SimulationResults doSimulation(int *errCode = nullptr);
 
 
    // return values:
@@ -42,7 +37,7 @@ protected:
 
    // parameters
    const QString outPutDirPath;
-   const ldouble stride;
+   const ldouble gridRes;
    const ldouble axAlphaMin;
    const ldouble axAlphaMax;
    const ldouble axBetaMin;
@@ -118,20 +113,23 @@ const QString gnuplotPath;
                      QVector<QVector <ldouble> > &chiSqL,
                      const ldouble lamDev);
 
-
-
-
    virtual ldouble calcFF0(const ldouble P) const = 0;
    virtual ldouble calcA0(const ldouble alpha, const ldouble beta) const = 0;
    virtual ldouble calcVol(const ldouble alpha, const ldouble beta) const = 0;
+
+   virtual ldouble calcAverageDens(const ldouble aCore,
+                                   const ldouble bCore,
+                                   const ldouble dShell,
+                                   const ldouble densCore,
+                                   const ldouble densSurf);
 
    virtual ldouble calcS(const ldouble aCore,
                          const ldouble bCore,
                          const ldouble dShell,
                          const ldouble visc,
-                         const ldouble densCore,
-                         const ldouble densSurf,
+                         const ldouble densAveragePart,
                          const ldouble densSolv) const;
+
    virtual ldouble calcLam(const ldouble aCore,
                            const ldouble bCore
                            ) const = 0;

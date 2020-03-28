@@ -17,6 +17,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QCheckBox>
+#include <functional>
+
 
 #include <QProcess>
 #include <QSettings>
