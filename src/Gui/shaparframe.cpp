@@ -40,18 +40,6 @@ ShaParFrame::ShaParFrame(QWidget *parent, Qt::WindowFlags f) : QFrame(parent, f)
    makeLabeledSpinBox(&solvLayerThicknessBox, tr("layer<sub>solv</sub> / nm:"),
                       tr("Solvation shell thickness"),         2, 11, 4,    0.0,  10.0);
    solvLayerThicknessBox->setEnabled(false);
-   /*
-   label= new QLabel("layer<sub>surf</sub> [nm]:", this);
-   lay->addWidget(label, 1, 8, 1, 3);
-   surfLayerThicknessBox = new QDoubleSpinBox(this);
-   lay->addWidget(surfLayerThicknessBox, 1, 11, 1, 3);
-
-   label = new QLabel("layer<sub>solv</sub> [nm]:", this);
-   lay->addWidget(label, 2, 8, 1, 3);
-   solvLayerThicknessBox = new QDoubleSpinBox(this);
-   solvLayerThicknessBox->setEnabled(false);
-   lay->addWidget(solvLayerThicknessBox, 2, 11, 1, 3);
-*/
 
    singDistSwitchBox = new QGroupBox(QString("Evaluation Mode"), this);
    lay->addWidget(singDistSwitchBox, 5, 0, 2, 10);

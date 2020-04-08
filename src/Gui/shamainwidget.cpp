@@ -206,16 +206,16 @@ void ShaMainWidget::switchToLongRod(bool chosen)
 }
 
 
-void ShaMainWidget::createVectorFromTo(QVector<ldouble> &v, ldouble min, ldouble max, ldouble stride)
+void ShaMainWidget::createVectorFromTo(QVecLDouble &v, ldouble min, ldouble max, ldouble stride)
 {
    int gridLength = int((max-min) / stride);
-   v = QVector<ldouble>(gridLength);
+   v = QVecLDouble(gridLength);
    for(int i = 0; i < gridLength; ++i) v [ i ] = min + stride * static_cast<ldouble>(i);
    ++gridLength;
    v.append(max);
 }
 
-int ShaMainWidget::minAt(const QVector<ldouble> &v, ldouble *val) const
+int ShaMainWidget::minAt(const QVecLDouble &v, ldouble *val) const
 {
    if(v.size() == 0) return -1;
    int minPos = 0;
@@ -230,9 +230,9 @@ int ShaMainWidget::minAt(const QVector<ldouble> &v, ldouble *val) const
    return minPos;
 }
 
-vector<vector<doublePair>> ShaMainWidget::extractMinLines(const QVector<QVector<QVector<ldouble>>> &chiPlots,
-                                                          const QVector<QVector<ldouble>> &axAlpha,
-                                                          const QVector<QVector<ldouble>> &axBeta ) const
+vector<vector<doublePair>> ShaMainWidget::extractMinLines(const QVector<QVector<QVecLDouble>> &chiPlots,
+                                                          const QVector<QVecLDouble> &axAlpha,
+                                                          const QVector<QVecLDouble> &axBeta ) const
 {
    const uint distSize = chiPlots.size();
    const uint axisSize = chiPlots[0].size();
@@ -245,7 +245,7 @@ vector<vector<doublePair>> ShaMainWidget::extractMinLines(const QVector<QVector<
    for(uint sd = 0; sd < distSize; ++sd){
       for(uint i = 0; i < axisSize; ++i){
          minLines[sd][i].alpha = axAlpha[sd][i];
-         const QVector<ldouble> &chiSdI = chiPlots[sd][i];
+         const QVecLDouble &chiSdI = chiPlots[sd][i];
          uint minBetaIndex = std::distance(chiSdI.begin(), std::min_element(chiSdI.begin(), chiSdI.end()));
          //if(sd==0) qDebug() << minBetaIndex;
          minLines[sd][i].beta = axBeta[sd][minBetaIndex];
@@ -362,8 +362,8 @@ void ShaMainWidget::distrCalculation()
 
    // Distributions, aligned, same size
    const uint distSize = data[0].size();
-   QVector<ldouble> distD(distSize);
-   QVector<ldouble> distS(distSize);
+   QVecLDouble distD(distSize);
+   QVecLDouble distS(distSize);
 
    for(int i = 0; i <  static_cast<int>(distSize); ++i){
       distD[i] = static_cast<ldouble>( data[0][i] );
@@ -371,16 +371,16 @@ void ShaMainWidget::distrCalculation()
    }
 /*
    // sD-Pair -> axisLength
-   QVector<QVector<ldouble> > axAlpha;
+   QMatLDouble axAlpha;
    axAlpha.resize(distSize);
-   QVector<QVector<ldouble> > axBeta;
+   QMatLDouble axBeta;
    axBeta.resize(distSize);
    // sD-Pair -> alpha -> beta
-   QVector<QVector<QVector<ldouble> > > chiSqD;
+   QVector<QMatLDouble > chiSqD;
    chiSqD.resize(distSize);
-   QVector<QVector<QVector<ldouble> > > chiSqS;
+   QVector<QMatLDouble > chiSqS;
    chiSqS.resize(distSize);
-   QVector<QVector<QVector<ldouble> > > chiSqLam;
+   QVector<QMatLDouble > chiSqLam;
    chiSqLam.resize(distSize);
 */
    QVector<SimulationResults> results;
@@ -468,15 +468,15 @@ void ShaMainWidget::distrCalculation()
    }
 
    // Transitory merge old vector types vecto from results:
-   QVector<QVector<QVector<ldouble>>> chiSqD;
+   QVector<QVector<QVecLDouble>> chiSqD;
    for(auto &r : results) chiSqD.append(r.chiSqD);
-   QVector<QVector<QVector<ldouble>>> chiSqS;
+   QVector<QVector<QVecLDouble>> chiSqS;
    for(auto &r : results) chiSqS.append(r.chiSqS);
-   QVector<QVector<QVector<ldouble>>> chiSqLam;
+   QVector<QVector<QVecLDouble>> chiSqLam;
    for(auto &r : results) chiSqLam.append(r.chiSqLam);
-   QVector<QVector<ldouble> > axAlpha;
+   QMatLDouble axAlpha;
    for(auto &r : results) axAlpha.append(r.axAlpha);
-   QVector<QVector<ldouble> > axBeta;
+   QMatLDouble axBeta;
    for(auto &r : results) axBeta.append(r.axBeta);
 
    // find minima for each distribution

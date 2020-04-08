@@ -115,12 +115,12 @@ private:
    // log Widget
    ShaLog *logWidget = nullptr;
 
-   void createVectorFromTo(QVector<ldouble> &v, ldouble min, ldouble max, ldouble stride);
-   int minAt(const QVector<ldouble> &v, ldouble *val = nullptr) const;
+   void createVectorFromTo(QVecLDouble &v, ldouble min, ldouble max, ldouble stride);
+   int minAt(const QVecLDouble &v, ldouble *val = nullptr) const;
 
-   std::vector<std::vector<doublePair>> extractMinLines(const QVector<QVector<QVector<ldouble>>> &chiPlots,
-                                                        const QVector<QVector<ldouble>> &axAlpha,
-                                                        const QVector<QVector<ldouble>> &axBeta ) const;
+   std::vector<std::vector<doublePair>> extractMinLines(const QVector<QVector<QVecLDouble>> &chiPlots,
+                                                        const QVector<QVecLDouble> &axAlpha,
+                                                        const QVector<QVecLDouble> &axBeta ) const;
 
    std::vector<doublePair> findCrossMinima(std::vector<std::vector<doublePair>> & data1,
                                            std::vector<std::vector<doublePair>> & data2) const;

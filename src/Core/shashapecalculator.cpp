@@ -1,6 +1,6 @@
 #include "shashapecalculator.h"
 
-int ShaShapeCalculator::minAt(const QVector<ldouble> &v, ldouble *val) const
+int ShaShapeCalculator::minAt(const QVecLDouble &v, ldouble *val) const
 {
     if(v.size() == 0) return -1;
     int minPos = 0;
@@ -15,7 +15,7 @@ int ShaShapeCalculator::minAt(const QVector<ldouble> &v, ldouble *val) const
     return minPos;
 }
 
-ldouble ShaShapeCalculator::minOf(const QVector<QVector<ldouble> > &v, int *iPos, int *jPos) const
+ldouble ShaShapeCalculator::minOf(const QMatLDouble &v, int *iPos, int *jPos) const
 {
     if(v.size() == 0) return -1;
     int minPosI = 0;
@@ -36,7 +36,7 @@ ldouble ShaShapeCalculator::minOf(const QVector<QVector<ldouble> > &v, int *iPos
     return min;
 }
 
-ldouble ShaShapeCalculator::maxOf(const QVector<QVector<ldouble> > &v, int *iPos, int *jPos) const
+ldouble ShaShapeCalculator::maxOf(const QMatLDouble &v, int *iPos, int *jPos) const
 {
     if(v.size() == 0) return -1.0;
     int maxPosI = 0;
@@ -57,7 +57,7 @@ ldouble ShaShapeCalculator::maxOf(const QVector<QVector<ldouble> > &v, int *iPos
     return max;
 }
 
-ldouble ShaShapeCalculator::meanOf(QVector<QVector<ldouble> > &v)
+ldouble ShaShapeCalculator::meanOf(QMatLDouble &v)
 {
     ldouble sum(0);
     //QVector<int> sizes;
@@ -73,12 +73,12 @@ ldouble ShaShapeCalculator::meanOf(QVector<QVector<ldouble> > &v)
     return sum / totalSize;
 }
 
-void ShaShapeCalculator::extractMinLine(const QVector<ldouble> &axAlpha,
-                                        const QVector<ldouble> &axBeta,
+void ShaShapeCalculator::extractMinLine(const QVecLDouble &axAlpha,
+                                        const QVecLDouble &axBeta,
                                         const ldouble minDistAB,
-                                        const QVector<QVector<ldouble> > &chiSq,
-                                        QVector<ldouble> &minAlpha,
-                                        QVector<ldouble> &minBeta,
+                                        const QMatLDouble &chiSq,
+                                        QVecLDouble &minAlpha,
+                                        QVecLDouble &minBeta,
                                         refGrid grid)
 {
     if(grid == gridOnAlpha)
@@ -96,17 +96,17 @@ void ShaShapeCalculator::extractMinLine(const QVector<ldouble> &axAlpha,
     }
 }
 
-pairLDouble ShaShapeCalculator::findIntersection(const QVector<ldouble> &alpha1, const QVector<ldouble> &beta1,
-                                                 const QVector<ldouble> &alpha2, const QVector<ldouble> &beta2,
+pairLDouble ShaShapeCalculator::findIntersection(const QVecLDouble &alpha1, const QVecLDouble &beta1,
+                                                 const QVecLDouble &alpha2, const QVecLDouble &beta2,
                                                  bool * foundIntersection, ldouble *rms){
 
 
 }
 
 void ShaShapeCalculator::writeGnuPlotChiSqData(const QString &fileName,
-                                               const QVector<ldouble> &axAlpha,
-                                               const QVector<ldouble> &axBeta,
-                                               const QVector<QVector<ldouble> > &chiSq)
+                                               const QVecLDouble &axAlpha,
+                                               const QVecLDouble &axBeta,
+                                               const QMatLDouble &chiSq)
 {
     // Write data file and replace nan/inf by missing sign"?"
     std::ofstream data;
@@ -135,8 +135,8 @@ void ShaShapeCalculator::writeGnuPlotChiSqData(const QString &fileName,
     void ShaShapeCalculator::writeGnuPlotChiSqPlotScript(const QString &scriptFileName,
                                                      const QString &dataFileName,
                                                      const QString &imgFileName,
-                                                     const QVector<ldouble> &axAlpha,
-                                                     const QVector<ldouble> &axBeta
+                                                     const QVecLDouble &axAlpha,
+                                                     const QVecLDouble &axBeta
                                                      )
 {
     // write gnuplot script for chiSqS and insert axis sizes (later also file paths)
@@ -180,7 +180,7 @@ void ShaShapeCalculator::callGnuPlot(const QString &gnuplotPath, const QString &
 
 int ShaShapeCalculator::plotCSV(const QString &fileName,
                                 const QStringList &headLine,
-                                const QVector<QVector<ldouble> > &plotValues) const
+                                const QMatLDouble &plotValues) const
 {
     if(headLine.size() != plotValues.size()) return 1;
 
@@ -215,29 +215,31 @@ int ShaShapeCalculator::plotCSV(const QString &fileName,
     return 0;
 }
 
-void ShaShapeCalculator::createVectorFromTo(QVector<ldouble> &v, ldouble min, ldouble max, ldouble stride)
+
+
+void ShaShapeCalculator::createVectorFromTo(QVecLDouble &v, ldouble min, ldouble max, ldouble stride)
 {
     int gridLength = int((max-min) / stride);
-    v = QVector<ldouble>(gridLength);
+    v = QVecLDouble(gridLength);
     for(int i = 0; i < gridLength; ++i) v [ i ] = min + stride * static_cast<ldouble>(i);
     ++gridLength;
     v.append(max);
 }
 
 void ShaShapeCalculator::plotAlphaBetaOptima(const QString& outPutDirPath,
-                                             const bool plotD, const QVector<ldouble> &minDAlpha, const QVector<ldouble> &minDBeta,
-                                             const bool plotS, const QVector<ldouble> &minSAlpha, const QVector<ldouble> &minSBeta,
-                                             const bool plotLam, const QVector<ldouble> &minLamAlpha, const QVector<ldouble> &minLamBeta,
-                                             const bool plotDDev, const QVector<ldouble> &minDAlphaDevU, const QVector<ldouble> &minDBetaDevU,
-                                             const QVector<ldouble> &minDAlphaDevL, const QVector<ldouble> &minDBetaDevL,
-                                             const bool plotSDev, const QVector<ldouble> &minSAlphaDevU, const QVector<ldouble> &minSBetaDevU,
-                                             const QVector<ldouble> &minSAlphaDevL, const QVector<ldouble> &minSBetaDevL,
-                                             const bool plotLamDev, const QVector<ldouble> &minLamAlphaDevU, const QVector<ldouble> &minLamBetaDevU,
-                                             const QVector<ldouble> &minLamAlphaDevL, const QVector<ldouble> &minLamBetaDevL) const
+                                             const bool plotD, const QVecLDouble &minDAlpha, const QVecLDouble &minDBeta,
+                                             const bool plotS, const QVecLDouble &minSAlpha, const QVecLDouble &minSBeta,
+                                             const bool plotLam, const QVecLDouble &minLamAlpha, const QVecLDouble &minLamBeta,
+                                             const bool plotDDev, const QVecLDouble &minDAlphaDevU, const QVecLDouble &minDBetaDevU,
+                                             const QVecLDouble &minDAlphaDevL, const QVecLDouble &minDBetaDevL,
+                                             const bool plotSDev, const QVecLDouble &minSAlphaDevU, const QVecLDouble &minSBetaDevU,
+                                             const QVecLDouble &minSAlphaDevL, const QVecLDouble &minSBetaDevL,
+                                             const bool plotLamDev, const QVecLDouble &minLamAlphaDevU, const QVecLDouble &minLamBetaDevU,
+                                             const QVecLDouble &minLamAlphaDevL, const QVecLDouble &minLamBetaDevL) const
 {
     // Write data file and replace nan/inf by missing sign"?"
     QStringList headLine;
-    QVector<QVector<ldouble> > plotValues;
+    QMatLDouble plotValues;
     if(plotD){
         headLine << "alpha D" << "beta D";
         plotValues << minDAlpha << minDBeta;

@@ -40,12 +40,12 @@ struct MeasurementParamaters {
 };
 
 struct SimulationResults{
-   QVector<ldouble> axAlpha;
-   QVector<ldouble> axBeta;
-   QVector<QVector<ldouble> > chiSqD; // optima for D
-   QVector<QVector<ldouble> > chiSqS; // optima for s
-   QVector<QVector<ldouble> > avDensityPart;
-   QVector<QVector<ldouble> > chiSqLam;
+   QVecLDouble axAlpha;
+   QVecLDouble axBeta;
+   QMatLDouble chiSqD; // optima for D
+   QMatLDouble chiSqS; // optima for s
+   QMatLDouble avDensityPart;
+   QMatLDouble chiSqLam;
 };
 
 #endif // SHAPARAMSTRUCTS_H

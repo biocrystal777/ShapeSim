@@ -1,5 +1,7 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
+
+#include <QVector>
 #include <vector>
 #include <utility>
 
@@ -17,5 +19,7 @@ typedef long double ldouble;
 typedef std::pair<ldouble, ldouble> pairLDouble;
 typedef std::vector<double> vecD;
 typedef std::vector<std::vector<double> > matD;
+typedef QVector<ldouble> QVecLDouble;
+typedef QVector<QVector<ldouble> >  QMatLDouble;
 
 #endif // DEFINITIONS_H

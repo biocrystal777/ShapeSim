@@ -78,38 +78,40 @@ const QString gnuplotPath;
 
    // methods
 
-   void calcChiSqD(const QVector<ldouble> &axAlpha,
-                   const QVector<ldouble> &axBeta,
+   void calcChiSqD(const QVecLDouble &axAlpha,
+                   const QVecLDouble &axBeta,
                    const ldouble dShell,
                    const ldouble visc,
                    const ldouble T,
                    const ldouble DMeas,
-                   QVector<QVector<ldouble> > &chiSq,
+                   QMatLDouble &chiSq,
                    const bool calcDevs,
-                   QVector<QVector<ldouble> > &chiSqUp,
+                   QMatLDouble &chiSqUp,
                    QVector<QVector <ldouble> > &chiSqL,
                    const ldouble DDev);
 
-   void calcChiSqS(const QVector<ldouble> &axAlpha,
-                   const QVector<ldouble> &axBeta,
+   void calcChiSqS(const QVecLDouble &axAlpha,
+                   const QVecLDouble &axBeta,
                    const ldouble dShell,
                    const ldouble visc,
                    const ldouble densCore,
                    const ldouble densSurf,
                    const ldouble densSolv,
-                   const ldouble SMeas,
-                   QVector<QVector<ldouble> > &chiSq,
+                   const ldouble SMeas,                   
+                   QMatLDouble &chiSq,
+                   const bool trackDensity,
+                   QMatLDouble &densityPart,
                    const bool calcDevS,
-                   QVector<QVector<ldouble> > &chiSqUp,
+                   QMatLDouble &chiSqUp,
                    QVector<QVector <ldouble> > &chiSqL,
                    const ldouble SDev);
 
-   void calcChiSqLam(const QVector<ldouble> &axAlpha,
-                     const QVector<ldouble> &axBeta,
+   void calcChiSqLam(const QVecLDouble &axAlpha,
+                     const QVecLDouble &axBeta,
                      const ldouble lamMeas,
-                     QVector<QVector<ldouble> > &chiSq,
+                     QMatLDouble &chiSq,
                      const bool calcDevs,
-                     QVector<QVector<ldouble> > &chiSqUp,
+                     QMatLDouble &chiSqUp,
                      QVector<QVector <ldouble> > &chiSqL,
                      const ldouble lamDev);
 

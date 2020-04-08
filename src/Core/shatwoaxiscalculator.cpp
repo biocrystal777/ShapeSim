@@ -39,13 +39,11 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
 SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
 {
    SimulationResults results;
-   QVector<ldouble> &axAlpha = results.axAlpha;
-   QVector<ldouble> &axBeta = results.axBeta;
-   QVector<QVector<ldouble> > chiSqD = results.chiSqD;   // optima for D
-   QVector<QVector<ldouble> > &chiSqS = results.chiSqS;   // optima for S
-   QVector<QVector<ldouble> > &chiSqLam = results.chiSqLam;
-
-
+   QVecLDouble &axAlpha = results.axAlpha;
+   QVecLDouble &axBeta = results.axBeta;
+   QMatLDouble chiSqD = results.chiSqD;   // optima for D
+   QMatLDouble &chiSqS = results.chiSqS;   // optima for S
+   QMatLDouble &chiSqLam = results.chiSqLam;
 
    {
       QDir outPutDir;
@@ -57,15 +55,15 @@ SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
 
    //-//////////////////////////////////
    // Get optimal beta(alpha) for D
-   QVector<ldouble> minDAlpha;
-   QVector<ldouble> minDBeta;
-   QVector<ldouble> minDAlphaDevU;
-   QVector<ldouble> minDBetaDevU;
-   QVector<ldouble> minDAlphaDevL;
-   QVector<ldouble> minDBetaDevL;
+   QVecLDouble minDAlpha;
+   QVecLDouble minDBeta;
+   QVecLDouble minDAlphaDevU;
+   QVecLDouble minDBetaDevU;
+   QVecLDouble minDAlphaDevL;
+   QVecLDouble minDBetaDevL;
    if(plotD){
-      QVector<QVector<ldouble> > chiSqDDevUpper;
-      QVector<QVector<ldouble> > chiSqDDevLower;
+      QMatLDouble chiSqDDevUpper;
+      QMatLDouble chiSqDDevLower;
       calcChiSqD(axAlpha, axBeta, dShell, visc, T, DMeas, chiSqD, plotDDev, chiSqDDevUpper, chiSqDDevLower, DDev);
 
 
@@ -85,16 +83,32 @@ SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
    }
    //-////////////////////////////////
    // Get optimal beta(alpha) for s //
-   QVector<ldouble> minSAlpha;
-   QVector<ldouble> minSBeta;
-   QVector<ldouble> minSAlphaDevU;
-   QVector<ldouble> minSBetaDevU;
-   QVector<ldouble> minSAlphaDevL;
-   QVector<ldouble> minSBetaDevL;
+   QVecLDouble minSAlpha;
+   QVecLDouble minSBeta;
+   QVecLDouble minSAlphaDevU;
+   QVecLDouble minSBetaDevU;
+   QVecLDouble minSAlphaDevL;
+   QVecLDouble minSBetaDevL;
+   QMatLDouble densityPart;
    if(plotS){
-      QVector<QVector<ldouble> > chiSqSDevUpper;
-      QVector<QVector<ldouble> > chiSqSDevLower;
-      calcChiSqS(axAlpha, axBeta, dShell, visc, densCore, densSurf, densSolv, SMeas, chiSqS, plotSDev, chiSqSDevUpper, chiSqSDevLower, SDev);
+      QMatLDouble chiSqSDevUpper;
+      QMatLDouble chiSqSDevLower;
+      calcChiSqS(axAlpha,
+                 axBeta,
+                 dShell,
+                 visc,
+                 densCore,
+                 densSurf,
+                 densSolv,
+                 SMeas,
+                 chiSqS,
+                 trackDensity,
+                 densityPart,
+                 plotSDev,
+                 chiSqSDevUpper,
+                 chiSqSDevLower,
+                 SDev
+                 );
       if(useGnuplot){
          //for(double v : chiSqS[0])    qDebug() << v;
       writeGnuPlotChiSqData(tr("%1/chiSqS").arg(outPutDirPath), axAlpha, axBeta, chiSqS);
@@ -112,15 +126,15 @@ SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
    }
    //-/////////////////////////////////////
    // Get optimal beta(alpha) for Lambda //
-   QVector<ldouble> minLamAlpha;
-   QVector<ldouble> minLamBeta;
-   QVector<ldouble> minLamAlphaDevU;
-   QVector<ldouble> minLamBetaDevU;
-   QVector<ldouble> minLamAlphaDevL;
-   QVector<ldouble> minLamBetaDevL;
+   QVecLDouble minLamAlpha;
+   QVecLDouble minLamBeta;
+   QVecLDouble minLamAlphaDevU;
+   QVecLDouble minLamBetaDevU;
+   QVecLDouble minLamAlphaDevL;
+   QVecLDouble minLamBetaDevL;
    if(plotLam){
-      QVector<QVector<ldouble> > chiSqLamDevUpper;
-      QVector<QVector<ldouble> > chiSqLamDevLower;
+      QMatLDouble chiSqLamDevUpper;
+      QMatLDouble chiSqLamDevLower;
       calcChiSqLam(axAlpha, axBeta, lamMeas, chiSqLam, plotLamDev, chiSqLamDevUpper, chiSqLamDevLower, lamDev);      
       if(useGnuplot){
          writeGnuPlotChiSqData(tr("%1/chiSqLambda").arg(outPutDirPath), axAlpha, axBeta, chiSqLam);
@@ -154,25 +168,25 @@ SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
 }
 
 
-void ShaTwoAxisCalculator::calcChiSqD(const QVector<ldouble> &axAlpha,
-                                      const QVector<ldouble> &axBeta,
+void ShaTwoAxisCalculator::calcChiSqD(const QVecLDouble &axAlpha,
+                                      const QVecLDouble &axBeta,
                                       const ldouble dShell, const ldouble visc, const ldouble T,
                                       const ldouble DMeas,
-                                      QVector<QVector<ldouble> > &chiSq,
+                                      QMatLDouble &chiSq,
                                       const bool calcDevs,
-                                      QVector<QVector<ldouble> > &chiSqUp, QVector<QVector<ldouble> > &chiSqL,
+                                      QMatLDouble &chiSqUp, QMatLDouble &chiSqL,
                                       const ldouble DDev)
 {
    const ldouble aGridLength = axAlpha.size();
    const ldouble bGridLength = axBeta.size();
 
-   chiSq = QVector<QVector<ldouble> >(aGridLength);
-   for(QVector<ldouble> &v : chiSq) v = QVector<ldouble>(bGridLength);
+   chiSq = QMatLDouble(aGridLength);
+   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
    if(calcDevs){
-      chiSqUp =  QVector<QVector<ldouble> >(aGridLength);
-      for(QVector<ldouble> &v : chiSqUp) v = QVector<ldouble>(bGridLength);
-      chiSqL = QVector<QVector<ldouble> >(aGridLength);
-      for(QVector<ldouble> &v : chiSqL) v = QVector<ldouble>(bGridLength);
+      chiSqUp =  QMatLDouble(aGridLength);
+      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
+      chiSqL = QMatLDouble(aGridLength);
+      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
    }
    const ldouble DDevU = DMeas + DDev;
    const ldouble DDevL = DMeas - DDev;
@@ -188,32 +202,39 @@ void ShaTwoAxisCalculator::calcChiSqD(const QVector<ldouble> &axAlpha,
    }
 }
 
-void ShaTwoAxisCalculator::calcChiSqS(const QVector<ldouble> &axAlpha,
-                                      const QVector<ldouble> &axBeta,
+void ShaTwoAxisCalculator::calcChiSqS(const QVecLDouble &axAlpha,
+                                      const QVecLDouble &axBeta,
                                       const ldouble dShell,
                                       const ldouble visc,
                                       const ldouble densCore, const ldouble densSurf,
                                       const ldouble densSolv, const ldouble SMeas,
-                                      QVector<QVector<ldouble> > &chiSq, const bool calcDevs,
-                                      QVector<QVector<ldouble> > &chiSqUp, QVector<QVector<ldouble> > &chiSqL, const ldouble SDev)
+                                      QMatLDouble &chiSq,
+                                      const bool trackDensity,
+                                      QMatLDouble &densityPart,
+                                      const bool calcDevs,
+                                      QMatLDouble &chiSqUp, QMatLDouble &chiSqL, const ldouble SDev)
 {
    const ldouble aGridLength = axAlpha.size();
    const ldouble bGridLength = axBeta.size();
-   chiSq = QVector<QVector<ldouble> >(aGridLength);
-   for(QVector<ldouble> &v : chiSq) v = QVector<ldouble>(bGridLength);
-   if(calcDevs){
-      chiSqUp = QVector<QVector<ldouble> > (aGridLength);
-      for(QVector<ldouble> &v : chiSqUp) v = QVector<ldouble>(bGridLength);
-      chiSqL =QVector<QVector<ldouble> > (aGridLength);
-      for(QVector<ldouble> &v : chiSqL) v = QVector<ldouble>(bGridLength);
+   chiSq = QMatLDouble(aGridLength);
+   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
+   if(trackDensity){
+      densityPart = QMatLDouble (aGridLength);
+      for(QVecLDouble &v : densityPart) v = QVecLDouble(bGridLength);
    }
+   if(calcDevs){
+      chiSqUp = QMatLDouble (aGridLength);
+      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
+      chiSqL =QMatLDouble (aGridLength);
+      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
+   }   
    const ldouble SDevU = SMeas + SDev;
    const ldouble SDevL = SMeas - SDev;
    for(int i = 0; i < aGridLength; ++i){
       for(int j = 0; j < bGridLength; ++j){
          ldouble densAveragePart = calcAverageDens(axAlpha[i], axBeta[j], dShell,densCore, densSurf);
+         if(trackDensity) densityPart[i][j] = densAveragePart;
          ldouble SCalc = calcS(axAlpha[i], axBeta[j], dShell, visc, densAveragePart, densSolv);
-
          chiSq[i][j] = calcChiSq(SCalc, SMeas, SMeas);
         // qDebug() << (double) axAlpha[i] << (double) axBeta[j] << (double) chiSq[i][j] << (double) SCalc << (double) SMeas << (double) dShell << (double) visc;
          if(calcDevs){
@@ -224,24 +245,24 @@ void ShaTwoAxisCalculator::calcChiSqS(const QVector<ldouble> &axAlpha,
    }
 }
 
-void ShaTwoAxisCalculator::calcChiSqLam(const QVector<ldouble> &axAlpha,
-                                        const QVector<ldouble> &axBeta,
+void ShaTwoAxisCalculator::calcChiSqLam(const QVecLDouble &axAlpha,
+                                        const QVecLDouble &axBeta,
                                         const ldouble lamMeas,
-                                        QVector<QVector<ldouble> > &chiSq,
+                                        QMatLDouble &chiSq,
                                         const bool calcDevs,
-                                        QVector<QVector<ldouble> > &chiSqUp,
-                                        QVector<QVector<ldouble> > &chiSqL,
+                                        QMatLDouble &chiSqUp,
+                                        QMatLDouble &chiSqL,
                                         const ldouble lamDev)
 {
    const ldouble aGridLength = axAlpha.size();
    const ldouble bGridLength = axBeta.size();
-   chiSq = QVector<QVector<ldouble> >(aGridLength);
-   for(QVector<ldouble> &v : chiSq) v = QVector<ldouble>(bGridLength);
+   chiSq = QMatLDouble(aGridLength);
+   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
    if(calcDevs){
-      chiSqUp = QVector<QVector<ldouble> >(aGridLength);
-      chiSqL = QVector<QVector<ldouble> > (aGridLength);
-      for(QVector<ldouble> &v : chiSqUp) v = QVector<ldouble>(bGridLength);
-      for(QVector<ldouble> &v : chiSqL) v = QVector<ldouble>(bGridLength);
+      chiSqUp = QMatLDouble(aGridLength);
+      chiSqL = QMatLDouble (aGridLength);
+      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
+      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
    }
    const ldouble lamDevU = lamMeas + lamDev;
    const ldouble lamDevL = lamMeas - lamDev;
