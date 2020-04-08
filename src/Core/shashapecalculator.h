@@ -102,7 +102,9 @@ protected:
                             ) const;
 
 
-   void makeLDoubleMatrix( const int aGridLength, const int bGridLength);
+   QMatLDouble makeLDoubleMatrix(const int aGridLength, const int bGridLength);
+
+
    void createVectorFromTo(QVecLDouble &v, ldouble min, ldouble max, ldouble stride);
    int minAt(const QVecLDouble &v, ldouble *val = nullptr) const;
    ldouble minOf(const QMatLDouble &v, int *iPos = nullptr, int *jPos = nullptr) const;

@@ -268,3 +268,12 @@ void ShaShapeCalculator::plotAlphaBetaOptima(const QString& outPutDirPath,
     if(err == 1) ShaLog::logError(tr("Plotting alpha/beta failed; HeadLine incompatible with data set."));
 }
 
+QMatLDouble ShaShapeCalculator::makeLDoubleMatrix(const int aGridLength, const int bGridLength)
+{
+   QMatLDouble mat = QMatLDouble (aGridLength);
+   for(QVecLDouble &v : mat) v = QVecLDouble(bGridLength);
+   return mat;
+}
+
+
+

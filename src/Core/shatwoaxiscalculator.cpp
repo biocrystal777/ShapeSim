@@ -36,7 +36,7 @@ ShaTwoAxisCalculator::ShaTwoAxisCalculator(const QString &outPutDirPath,
 {
 }
 
-SimulationResults ShaTwoAxisCalculator::doSimulation(int * errCode)
+SimulationResults ShaTwoAxisCalculator::doSimulation(int *errCode)
 {
    SimulationResults results;
    QVecLDouble &axAlpha = results.axAlpha;
@@ -177,17 +177,15 @@ void ShaTwoAxisCalculator::calcChiSqD(const QVecLDouble &axAlpha,
                                       QMatLDouble &chiSqUp, QMatLDouble &chiSqL,
                                       const ldouble DDev)
 {
-   const ldouble aGridLength = axAlpha.size();
-   const ldouble bGridLength = axBeta.size();
+   const int aGridLength = axAlpha.size();
+   const int bGridLength = axBeta.size();
 
-   chiSq = QMatLDouble(aGridLength);
-   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
+   chiSq = makeLDoubleMatrix(aGridLength, bGridLength);
    if(calcDevs){
-      chiSqUp =  QMatLDouble(aGridLength);
-      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
-      chiSqL = QMatLDouble(aGridLength);
-      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
+      chiSqUp = makeLDoubleMatrix(aGridLength, bGridLength);
+      chiSqL = makeLDoubleMatrix(aGridLength, bGridLength);
    }
+
    const ldouble DDevU = DMeas + DDev;
    const ldouble DDevL = DMeas - DDev;
    for(int i = 0; i < aGridLength; ++i){
@@ -214,20 +212,16 @@ void ShaTwoAxisCalculator::calcChiSqS(const QVecLDouble &axAlpha,
                                       const bool calcDevs,
                                       QMatLDouble &chiSqUp, QMatLDouble &chiSqL, const ldouble SDev)
 {
-   const ldouble aGridLength = axAlpha.size();
-   const ldouble bGridLength = axBeta.size();
-   chiSq = QMatLDouble(aGridLength);
-   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
-   if(trackDensity){
-      densityPart = QMatLDouble (aGridLength);
-      for(QVecLDouble &v : densityPart) v = QVecLDouble(bGridLength);
-   }
+   const int aGridLength = axAlpha.size();
+   const int bGridLength = axBeta.size();
+
+   chiSq = makeLDoubleMatrix(aGridLength, bGridLength);
+   if(trackDensity) densityPart =  makeLDoubleMatrix(aGridLength, bGridLength);
    if(calcDevs){
-      chiSqUp = QMatLDouble (aGridLength);
-      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
-      chiSqL =QMatLDouble (aGridLength);
-      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
-   }   
+      chiSqUp = makeLDoubleMatrix(aGridLength, bGridLength);
+      chiSqL = makeLDoubleMatrix(aGridLength, bGridLength);
+   }
+
    const ldouble SDevU = SMeas + SDev;
    const ldouble SDevL = SMeas - SDev;
    for(int i = 0; i < aGridLength; ++i){
@@ -254,15 +248,12 @@ void ShaTwoAxisCalculator::calcChiSqLam(const QVecLDouble &axAlpha,
                                         QMatLDouble &chiSqL,
                                         const ldouble lamDev)
 {
-   const ldouble aGridLength = axAlpha.size();
-   const ldouble bGridLength = axBeta.size();
-   chiSq = QMatLDouble(aGridLength);
-   for(QVecLDouble &v : chiSq) v = QVecLDouble(bGridLength);
+   const int aGridLength = axAlpha.size();
+   const int bGridLength = axBeta.size();
+   chiSq = makeLDoubleMatrix(aGridLength, bGridLength);
    if(calcDevs){
-      chiSqUp = QMatLDouble(aGridLength);
-      chiSqL = QMatLDouble (aGridLength);
-      for(QVecLDouble &v : chiSqUp) v = QVecLDouble(bGridLength);
-      for(QVecLDouble &v : chiSqL) v = QVecLDouble(bGridLength);
+      chiSqUp = makeLDoubleMatrix(aGridLength, bGridLength);
+      chiSqL = makeLDoubleMatrix(aGridLength, bGridLength);
    }
    const ldouble lamDevU = lamMeas + lamDev;
    const ldouble lamDevL = lamMeas - lamDev;
@@ -314,7 +305,6 @@ ldouble ShaTwoAxisCalculator::calcAverageDens(const ldouble aCore,
    return rhoPart;
 }
 
-
 ldouble ShaTwoAxisCalculator::calcS(const ldouble aCore,
                                            const ldouble bCore,
                                            const ldouble dShell,
@@ -322,7 +312,6 @@ ldouble ShaTwoAxisCalculator::calcS(const ldouble aCore,
                                            const ldouble densAveragePart,
                                            const ldouble densSolv) const
 {
-
    //constexpr ldouble PI = 3.141;
 
    ldouble rAlpha = aCore + dShell;                     // [nm]
